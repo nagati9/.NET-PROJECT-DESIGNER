@@ -1,0 +1,35 @@
+﻿@model List<ANA_ProjectDesigner.Models.Domain.Profils>
+
+@{
+}
+
+<h1>Profils</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">PhoneNumber</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profil in Model)
+        {
+        <tr>
+                <td>@profil.Id</td>
+                <td>@profil.FirstName</td>
+                <td>@profil.LastName</td>
+                <td>@profil.PhoneNumber</td>
+                <td>@profil.Email</td>
+                <td>@profil.Password</td>
+                <td><a href="DataProfil/@profil.Id">View</a></td>
+        </tr>
+        }
+
+    </tbody>
+</table>
