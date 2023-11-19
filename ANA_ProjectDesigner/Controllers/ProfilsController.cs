@@ -8,9 +8,9 @@ namespace ANA_ProjectDesigner.Controllers
 {
     public class ProfilsController : Controller
     {
-        private readonly ProfilDBContext profilDBContext;
+        private readonly MyDBContext profilDBContext;
 
-        public ProfilsController(ProfilDBContext profilDBContext)
+        public ProfilsController(MyDBContext profilDBContext)
         {
             this.profilDBContext = profilDBContext;
         }

@@ -1,0 +1,92 @@
+﻿    @model List<ANA_ProjectDesigner.Models.Domain.Projects>
+    @{
+    }
+
+
+
+    <head>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                font-family: Arial, sans-serif;
+                font-size: small;
+                color: white;
+            }
+            .back {
+                width: 100vw; /* Full width of viewport */
+                height: 100vh; /* Full height of viewport */
+                display: flex;
+                flex-direction:column;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 50%);
+            }
+            .carre{
+                background-color: black;
+                display:flex;
+                justify-content:center;
+                margin: auto;
+                width:80%;
+              
+
+            }
+            .table{
+            background-color: #252323;
+                width:90%;
+            margin: 5%;
+            }
+
+            .ligne{
+                background-color: #D9D9D9;
+                margin:5%;
+                height:50px;
+                color:black;
+             
+            
+            }
+
+        .ligne:hover {
+            background: black ;
+            color:white;
+
+        }
+        </style>
+    </head>
+    <body>
+        <div class="back">
+
+            <h1>Projects</h1>
+            <div class="carre">
+            <table class="table">
+                <thead>
+                    <tr>
+                  
+                        <th scope="col">Project Name</th>
+                   
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
+                    {
+                        <tr class="ligne">
+                       
+                            <td>@project.Name</td>
+                       
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            </div>      
+
+
+
+
+        </div>
+
+    </body>

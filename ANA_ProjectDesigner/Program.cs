@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<ProfilDBContext>(options =>
+builder.Services.AddDbContext<MyDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataConnectionString")));
 
 var app = builder.Build();
@@ -28,6 +28,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Projects}/{action=ListProjects}/{id?}");
 
 app.Run();

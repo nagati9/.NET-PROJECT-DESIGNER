@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ANAProjectDesigner.Migrations
 {
-    [DbContext(typeof(ProfilDBContext))]
+    [DbContext(typeof(MyDBContext))]
     [Migration("20231118174147_Add Country field")]
     partial class AddCountryfield
     {

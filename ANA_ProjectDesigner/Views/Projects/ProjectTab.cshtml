@@ -1,0 +1,129 @@
+﻿@model ANA_ProjectDesigner.Models.AddProjectViewModel
+@{
+}
+
+<!DOCTYPE html>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        font-size:small;
+        color: white;
+
+    }
+   .back{
+        width: 100vw; /* Full width of viewport */
+        height: 100vh; /* Full height of viewport */
+        display:flex;
+        
+        margin:0;
+        padding:0;
+        height:100%;
+        background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 50%);
+       
+          }
+
+    #NewProject{
+         width:450px;
+         height:450px;
+        background-color:black;
+        align-content:center;
+        justify-content:center;
+        justify-items: center;
+        display: flex;
+        align-self: center;
+        margin: auto;
+    }
+
+    .textBox1{
+        width:400px;
+        height: 100px;
+        background-color: #D9D9D9;
+        margin:10px;
+    }
+
+    .textBox2 {
+
+        width: 400px;
+        height: 150px;
+        margin: 10px;
+        background-color: #D9D9D9;
+    }
+
+    .pres{
+        display:flex;
+        justify-content:center;
+       
+    }
+    .submit{
+       
+        background: #B20D0D;
+        width: 80px;
+        height:40px;
+        
+
+    }
+    #bouton{
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+    }
+
+        .submit:hover {
+            background: #1a2526;
+        }
+
+</style>
+
+<div class="back">
+    <div id="NewProject">
+        <form  action="Add" method="post">
+            <p class="pres">Create a new Project</p>
+            <!--Project name-->
+            <div class="box">
+
+                    <label for="projectName" class="pres" > Project Name: </label>
+                <div class="new iconBox">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+
+                    <input asp-for="Name" class="textBox1" placeholder="Project Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="clr"></div>
+            </div>
+
+
+            <!--Description-->
+                <div class="box">
+
+                    <label for="projectDescrition" class="pres"> ProjectDescription: </label>
+                    <div class="new iconBox">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+
+                        <input asp-for="Description" class="textBox2" placeholder="Add Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="clr"></div>
+                </div>
+
+                <div class="box" id="bouton">
+                <input type="submit" name="Submit" class="submit" value="Create" asp-action="Add" asp-controller="Projects">
+                 </div>
+
+
+         </form>
+    </div>
+</div>
+
+
+
