@@ -57,7 +57,7 @@ namespace ANA_ProjectDesigner.Controllers
                 await projectDBContext.SaveChangesAsync();
             }
 
-            return RedirectToAction("ListProjects","Profils");
+            return RedirectToAction("Welcome","Profils");
         }
     }
 

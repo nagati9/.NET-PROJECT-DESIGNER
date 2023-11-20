@@ -26,9 +26,13 @@ namespace ANA_ProjectDesigner.Controllers
           //  return RedirectToAction("Welcome");
         }
         [HttpGet]
-        public IActionResult Welcome(Guid profilUserId)
+        public IActionResult Welcome()
         {
-            ViewBag.profilUserId = profilUserId;
+            string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
+            {
+                ViewBag.profilUserId = profilUserId;
+            }
             return View(profilUserId);
         }
         [HttpGet]
@@ -56,8 +60,8 @@ namespace ANA_ProjectDesigner.Controllers
 
             await profilDBContext.Profils.AddAsync(profil);
             await profilDBContext.SaveChangesAsync();
-            HttpContext.Session.SetString("ID", "122");
-            return RedirectToAction("Welcome", "Profils", new { profilUserId = profil.Id});
+            HttpContext.Session.SetString("idUser", profil.Id.ToString());
+            return RedirectToAction("Welcome", "Profils");
            
         }
 

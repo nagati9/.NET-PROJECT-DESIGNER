@@ -100,6 +100,18 @@
         </div>
     </div>
 
+    <script>
+        // Retrieve data from the server
+        var dataFromServer = '@ViewBag.profilUserId';
+
+        // Store data in local storage
+        localStorage.setItem('myData', dataFromServer);
+
+        // You can now use the data stored in localStorage as needed
+        var retrievedData = localStorage.getItem('myData');
+        console.log('Data retrieved from localStorage:', retrievedData);
+    </script>
+
 </div>
 
 
