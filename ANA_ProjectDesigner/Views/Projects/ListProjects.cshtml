@@ -70,13 +70,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var project in Model)
+
+
+                    
+                    }@foreach (var project in Model)
                     {
-                        <tr class="ligne">
-                       
-                            <td>@project.Name</td>
-                       
-                        </tr>
+                      
+                            <tr class="ligne">
+                                <td>@project.Name</td>
+                                <td><a href="ListProjects/@project.ProfileId">View</a></td>
+                                <!-- Add other project properties here as needed -->
+                            </tr>
+                        
                     }
 
                 </tbody>

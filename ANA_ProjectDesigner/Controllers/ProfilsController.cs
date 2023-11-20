@@ -1,6 +1,7 @@
 ﻿using ANA_ProjectDesigner.Data;
 using ANA_ProjectDesigner.Models;
 using ANA_ProjectDesigner.Models.Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,21 @@ namespace ANA_ProjectDesigner.Controllers
             this.profilDBContext = profilDBContext;
         }
 
+       
         [HttpGet]
-        public async Task<IActionResult> ListUserProfils()
+        public async Task<IActionResult> ListUserProfils(Guid profilUserId)
         {
-           var profils = await profilDBContext.Profils.ToListAsync();
+            ViewBag.profilUserId = profilUserId;
+            var profils = await profilDBContext.Profils.ToListAsync();
             return View(profils);
+          //  return RedirectToAction("Welcome");
         }
-
+        [HttpGet]
+        public IActionResult Welcome(Guid profilUserId)
+        {
+            ViewBag.profilUserId = profilUserId;
+            return View(profilUserId);
+        }
         [HttpGet]
         public IActionResult Register()
         {
@@ -43,9 +52,13 @@ namespace ANA_ProjectDesigner.Controllers
                 
             };
 
+           
+
             await profilDBContext.Profils.AddAsync(profil);
             await profilDBContext.SaveChangesAsync();
-            return RedirectToAction("ListUserProfils");
+            HttpContext.Session.SetString("ID", "122");
+            return RedirectToAction("Welcome", "Profils", new { profilUserId = profil.Id});
+           
         }
 
         [HttpGet]

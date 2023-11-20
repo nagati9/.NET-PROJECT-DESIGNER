@@ -1,0 +1,216 @@
+﻿@model List<ANA_ProjectDesigner.Models.Domain.Sprints>
+                                <style>
+                                    body, html {
+                                        margin: 0;
+                                        padding: 0;
+                                        height: 100%;
+                                        font-family: Arial, sans-serif;
+                                        font-size: small;
+                                        color: white;
+                                    }
+                                        .back{
+                                        width: 100vw; /* Full width of viewport */
+                                        height: 100vh; /* Full height of viewport */
+                                        display: flex;
+                                        margin: 0;
+                                        padding: 0;
+                                        height: 100%;
+                                        background-color: #ECE0E0;
+                                    display: grid;
+       
+                                    }
+                                    .dropdown-list {
+                                        display: none;
+                                        list-style: none;
+                                        padding: 0;
+                                    }
+
+                                    .dropdown-title {
+                                        cursor: pointer;
+                                        border-bottom: 1px solid #ccc;
+                                    }
+
+                                        .dropdown-title.clicked + .dropdown-list {
+                                            display: block;
+                                        }
+
+                                    .submit {
+                                        float: right;
+                                        border: none;
+                                        color: white;
+                                        width: 110px;
+                                        height: 35px;
+                                        background: #B20D0D;
+                                        text-transform: uppercase;
+                                        cursor: pointer;
+                                    margin: 2%;
+                                    }
+                                    .buttons{
+                                height: 100%;
+                                display: flex;
+                                    flex-direction: column;
+                                    justify-self: center;
+                                    width: 25%;
+                                    margin-left: auto;
+       
+                                    }
+                                    .dropdown{
+                                    width: 50%;
+                                height: 100%;
+                                    }      
+        
+                                    .date{
+                                    height: 30%;
+                                    /* margin-right: 0%; */
+                                    margin-left: auto;
+                                       width:30%;
+                                    background-color: #3D3939;
+                                    height:100%
+                                    }
+                                    .top{
+                                        display:flex;
+                                        width:100%;
+                                        height:40%;
+                                    }
+
+                        nav ul {
+                            list-style: none;
+                            padding: 0;
+                            text-align: left;
+                            color:black;
+
+                    background-color: #ECE0E0;
+                        }
+           
+                            nav ul li {
+                                display: inline-block;
+                                margin: 10px;
+                                width:100px;
+                                height: 50px;
+                    
+                            }
+
+                        section {
+                            display: none;
+                            padding: 20px;
+                        }
+
+                            section.active {
+                                display: block;
+                            }
+
+                nav ul li:hover {
+                    background-color: #3D3939;
+                }
+        
+        
+                                </style>
+
+
+
+                                <div class="back">
+   
+                                    <div class="top">
+                                        <div class="dropdown">
+                                            <h2 class="dropdown-title">Click to Expand</h2>
+                                            <ul class="dropdown-list">
+                                                <li>Item 1</li>
+                                                <li>Item 2</li>
+                                                <li>Item 3</li>
+                                            </ul>
+
+
+                                        <script>
+                                            // JavaScript for toggling the dropdown
+                                            const title = document.querySelector('.dropdown-title');
+                                            title.addEventListener('click', function () {
+                                                this.classList.toggle('clicked');
+                                            });
+                                        </script>
+                                        </div>
+
+                                        <div class="buttons">
+                                        <input type="submit" asp-controller="Profils" asp-action="Add" name="Submit" class="submit" value="Create">
+                                        <input type="submit" asp-controller="Profils" asp-action="Add" name="Submit" class="submit" value="Create">
+                                        <input type="submit" asp-controller="Profils" asp-action="Add" name="Submit" class="submit" value="Create">
+                                        </div>
+
+                                        <div class="date"></div>
+        
+                                </div>
+      
+    
+
+                                    <div class="tab">
+                                <nav>
+                                    <ul>
+                                        <li><a href="#" onclick="showSection('section1')">Section 1</a></li>
+                                        <li><a href="#" onclick="showSection('section2')">Section 2</a></li>
+                                        <li><a href="#" onclick="showSection('section3')">Section 3</a></li>
+                                    </ul>
+                                </nav>
+
+                                <section id="section1" class="active">
+
+                        <div class="carre">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+
+                                        <th scope="col"> Id</th>
+                                <th scope="col"> Sprint Name</th>
+                                <th scope="col"> Start date</th>
+                                <th scope="col">End date</th>
+                                <th scope="col">Comments</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        @foreach (var sprint in Model)
+                        {
+                            <tr class="ligne">
+
+                                <td>@sprint.SprintId</td>
+                                <td>@sprint.SprintName</td>
+                                <td>@sprint.DateStart</td>
+                                <td>@sprint.DateEnd</td>
+                                <td>@sprint.Comments</td>
+
+
+                            </tr>
+                        }
+                                
+
+                                </tbody>
+                            </table>
+        </div>
+
+
+                                </section>
+
+                                <section id="section2">
+                                    <h2>Section 2 Content</h2>
+                                    <p>This is the content of section 2.</p>
+                                </section>
+
+                                <section id="section3">
+                                    <h2>Section 3 Content</h2>
+                                    <p>This is the content of section 3.</p>
+                                </section>
+
+                                <script>
+                                    // JavaScript to toggle active section
+                                    function showSection(sectionId) {
+                                        const sections = document.querySelectorAll('section');
+                                        sections.forEach(section => {
+                                            section.classList.remove('active');
+                                        });
+                                        const selectedSection = document.getElementById(sectionId);
+                                        selectedSection.classList.add('active');
+                                    }
+                                </script>
+                                    </div>
+
+
+                                </div>

@@ -2,6 +2,7 @@
 using ANA_ProjectDesigner.Models.Domain;
 using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ANA_ProjectDesigner.Controllers
 {
@@ -17,17 +18,19 @@ namespace ANA_ProjectDesigner.Controllers
 
 
 
-        [HttpGet]
+       /* [HttpGet]
         public IActionResult SprintTab()
         {
             return View();
-        }
+        }*/
         [HttpGet]
-        /* public async Task<IActionResult> ListSprints()
+         public async Task<IActionResult> SprintTab()
          {
-             var sprints = await DBContext.Sprints.ToListAsync();
+             var sprints = await sprintDBContext.Sprints.ToListAsync();
              return View(sprints);
-         }*/
+         }
+
+       
 
         [HttpPost]
         public async Task<IActionResult> Add(AddSprintViewModel addSprintRequest)
@@ -36,7 +39,7 @@ namespace ANA_ProjectDesigner.Controllers
             {
                 SprintId = Guid.NewGuid(),
                 SprintName = addSprintRequest.SprintName,
-                 ProjectId = addSprintRequest.ProjectId,
+                 //ProjectId = addSprintRequest.ProjectId,
                 DateStart = addSprintRequest.DateStart,
                 DateEnd = addSprintRequest.DateEnd,
                 Comments = addSprintRequest.Comments

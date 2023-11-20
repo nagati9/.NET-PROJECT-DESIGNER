@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataConnectionString")));
@@ -26,8 +29,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Projects}/{action=ListProjects}/{id?}");
+    pattern: "{controller=Sprints}/{action=SprintTab}/{id?}");
 
 app.Run();

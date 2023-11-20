@@ -11,6 +11,6 @@
 
         public string Country { get; set; }
 
-        public List<Sprints> Sprints { get; set; }
+        public virtual List<Projects> projectList { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace ANA_ProjectDesigner.Controllers
     {
         private readonly MyDBContext projectDBContext;
 
+        private Guid profilId;
+
         public ProjectsController(MyDBContext projectDBContext)
         {
             this.projectDBContext = projectDBContext;
@@ -19,36 +21,47 @@ namespace ANA_ProjectDesigner.Controllers
         
 
         [HttpGet]
-        public IActionResult ProjectTab()
+        public IActionResult ProjectTab(Guid profilUserId)
         {
-            return View();
+            TempData["YourGUID"] = profilUserId;
+           return View();
+
+           // return RedirectToAction("Welcome");
         }
         [HttpGet]
-        public async Task<IActionResult> ListProjects()
+        public async Task<IActionResult> ListProjects(Guid profilUserId)
         {
-            var projects = await projectDBContext.Projects.ToListAsync();
+          
+            
+            TempData["YourGUID"] = profilUserId;
+            var projects = await projectDBContext.Projects.Where(p => p.ProfileId == profilUserId).ToListAsync();
             return View(projects);
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddProjectViewModel addProfilRequest)
         {
-            var project = new Projects()
+            // Retrieve the Guid from TempData
+            if (TempData["YourGUID"] is Guid profilUserId)
             {
-                Id = Guid.NewGuid(),
-                Name = addProfilRequest.Name,
-               Description = addProfilRequest.Description
-               
+                var project = new Projects()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = addProfilRequest.Name,
+                    Description = addProfilRequest.Description,
+                    ProfileId = profilUserId
+                };
 
-            };
+                await projectDBContext.Projects.AddAsync(project);
+                await projectDBContext.SaveChangesAsync();
+            }
 
-            await projectDBContext.Projects.AddAsync(project);
-            await projectDBContext.SaveChangesAsync();
-            return RedirectToAction("ListUserProfils");
+            return RedirectToAction("ListProjects","Profils");
         }
-
-
-
-
     }
+
+
+
 }
+

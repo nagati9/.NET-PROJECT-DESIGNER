@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANAProjectDesigner.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class ProfilDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231119144702_Foreign Key profile-project")]
+    partial class ForeignKeyprofileproject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,16 +100,11 @@ namespace ANAProjectDesigner.Migrations
                     b.Property<DateTime>("DateStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SprintName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SprintId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("Sprints");
                 });
@@ -122,25 +120,9 @@ namespace ANAProjectDesigner.Migrations
                     b.Navigation("Profils");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprints", b =>
-                {
-                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Projects", "Projects")
-                        .WithMany("Sprints")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Projects");
-                });
-
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profils", b =>
                 {
                     b.Navigation("projectList");
-                });
-
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Projects", b =>
-                {
-                    b.Navigation("Sprints");
                 });
 #pragma warning restore 612, 618
         }
