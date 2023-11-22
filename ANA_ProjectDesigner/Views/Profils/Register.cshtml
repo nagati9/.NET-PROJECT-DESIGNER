@@ -120,6 +120,12 @@
 
     <!-- Body of Form starts -->
     <div class="container">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
         <form action="Add" method="post">
             <p id="signup">Sign up</p>
             <!--First name-->

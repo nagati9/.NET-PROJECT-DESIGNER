@@ -4,116 +4,85 @@
 
 <!DOCTYPE html>
 
-<div class="text-center">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            font-family: Arial, sans-serif;
+
+            text-align: center;
         }
 
-        img {
+        .header-section {
+            height: 40vh; /* 40% de la hauteur de la vue */
             display: flex;
-            z-index: 1;
-            height: 300px;
-            width: 300px;
+            justify-content: center;
             align-items: center;
+            flex-direction:column;
+            background-color: #3D3939; /* Couleur de fond */
+            padding:2%
         }
-
 
         #welcome {
-            display: flex;
-            z-index: 1;
             color: white;
             font-size: 30px;
             font-weight: bold;
             align-items: safe center;
         }
 
-
-
-
-
-        .container {
+        .main-section {
+            height: 60vh; /* 60% de la hauteur de la vue */
             display: flex;
-            align-items: center;
             justify-content: center;
-            flex-direction: column;
-            background-color: #3D3939;
+            align-items: center;
+            flex-direction: row;
+            background-color: #ECE0E0;
         }
 
-        .container2 {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            justify-content: center;
-            margin: 5%;
+        img {
+            max-width: 100%;
+            max-height: 100%;
         }
 
-
-        .button {
-            background-color: #3D3939;
-            width: 200px;
-            height: 100px;
-            border: none;
+        button {
+            background-color: #3D3939; /* Rouge */
             color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
+            font-size: 32px;
+            width: 50vh;
+            margin: 0 30px; /* Espacement entre les boutons */
+            padding: 30px 35px;
             cursor: pointer;
-        }
-
-        buttons:hover {
-            opacity: 0.7;
-        }
-
-
-        .buttons {
-            display: flex;
-            align-items: center;
-            gap: 60px;
+            border: none;
+            margin:2%;
+            border-radius: 5px;
         }
     </style>
 
-    <div class="container">
-
-        <div id="icon">
-
-            <img src="../Images/calendar.png" alt="Calendar Icon">
-
-        </div>
-        <p id="welcome">Welcome to Project Designer !</p>
-
-    </div>
-
-
-    <div class="container2">
-        <div class="buttons">
-            <!-- Redirect to "listProjects" view -->
-            <a href="@Url.Action("projectTab", "Projects", new {  profilUserId = @ViewBag.profilUserId })" class="button">Create new project</a>
-
-            <!-- Redirect to "projectTab" view -->
-            <a href="@Url.Action("listProjects", "Projects" ,  new {  profilUserId = @ViewBag.profilUserId })" class="button">Manage</a>
-        </div>
-    </div>
-
     <script>
-        // Retrieve data from the server
-        var dataFromServer = '@ViewBag.profilUserId';
+        function redirectToProjectTab() {
+            window.location.href = '@Url.Action("projectTab", "Projects")';
+        }
 
-        // Store data in local storage
-        localStorage.setItem('myData', dataFromServer);
-
-        // You can now use the data stored in localStorage as needed
-        var retrievedData = localStorage.getItem('myData');
-        console.log('Data retrieved from localStorage:', retrievedData);
+        function redirectToListProjects() {
+            window.location.href = '@Url.Action("listProjects", "Projects")';
+        }
     </script>
+</head>
+<body>
+    <div class="header-section">
+        <img src="/images/Logo_Calendar.svg" alt="Illustration" />
+        <p  id="welcome">Welcome to Project Designer !</p>
+    </div>
 
-</div>
-
-
-
+    <div class="main-section">
+        <button onclick="redirectToProjectTab()">Create a new project</button>
+        <button onclick="redirectToListProjects()">Existing project</button>
+    </div>
+</body>
+</html>
 

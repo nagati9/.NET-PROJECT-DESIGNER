@@ -1,0 +1,82 @@
+﻿@model ANA_ProjectDesigner.Models.UpdateProfilViewModel
+
+@{
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            
+        }
+
+        .header-section {
+            height: 40vh; /* 40% de la hauteur de la vue */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #3D3939; /* Couleur de fond */
+
+        }
+
+        .main-section {
+            height: 60vh; /* 60% de la hauteur de la vue */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            background-color: #ECE0E0;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        input, button, a {
+            margin-bottom: 15px;
+            padding: 10px;
+            width: 300px;
+            font-size: 24px;
+            text-align:center
+        }
+
+        button {
+            background-color: #4CAF50; /* Couleur de fond du bouton */
+            color: white;
+            cursor: pointer;
+        }
+
+        a {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <img src="~/images/Logo_Calendar.svg" alt="Illustration" />
+    </div>
+
+    <div class="main-section">
+        <form style="display:contents" asp-controller="Profils" asp-action="loginUser" method="post">
+            <input required type="email" asp-for="Email" placeholder="Email Utilisateur" />
+            <input required type="password" asp-for="Password" placeholder="Mot de passe" />
+            <button submit>Login</button>
+         </form>
+        <a href="/Profils/Register">Not a user ? Sign up</a>
+    </div>
+</body>
+</html>

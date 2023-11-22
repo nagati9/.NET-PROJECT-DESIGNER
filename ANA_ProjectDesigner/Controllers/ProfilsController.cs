@@ -36,9 +36,30 @@ namespace ANA_ProjectDesigner.Controllers
             return View(profilUserId);
         }
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string error)
+        {
+            ViewBag.Error = error;
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> loginUser(string Email, string Password)
+        {
+            var user = await profilDBContext.Profils.FirstOrDefaultAsync(x => x.Email == Email);
+
+            if (user != null && (Password == user.Password))
+            {
+                HttpContext.Session.SetString("idUser", user.Id.ToString());
+                return RedirectToAction("Welcome");
+            }
+
+            return RedirectToAction("Register", "Profils", new { error = "Identifiants incorrects" });
         }
 
         [HttpPost]

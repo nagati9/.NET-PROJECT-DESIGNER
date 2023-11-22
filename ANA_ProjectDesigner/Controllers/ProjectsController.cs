@@ -23,27 +23,29 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpGet]
         public IActionResult ProjectTab(Guid profilUserId)
         {
-            TempData["YourGUID"] = profilUserId;
            return View();
 
            // return RedirectToAction("Welcome");
         }
         [HttpGet]
-        public async Task<IActionResult> ListProjects(Guid profilUserId)
+        public async Task<IActionResult> ListProjects()
         {
           
-            
-            TempData["YourGUID"] = profilUserId;
-            var projects = await projectDBContext.Projects.Where(p => p.ProfileId == profilUserId).ToListAsync();
-            return View(projects);
-
+            string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
+            {
+                var projects = await projectDBContext.Projects.Where(p => p.ProfileId == profilUserId).ToListAsync();
+                return View(projects);
+            }
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddProjectViewModel addProfilRequest)
         {
             // Retrieve the Guid from TempData
-            if (TempData["YourGUID"] is Guid profilUserId)
+            string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
                 var project = new Projects()
                 {
@@ -58,6 +60,19 @@ namespace ANA_ProjectDesigner.Controllers
             }
 
             return RedirectToAction("Welcome","Profils");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GoToProject()
+        {
+            // Retrieve the Guid from TempData
+            /*string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
+            {
+
+            }*/
+
+            return RedirectToAction("SprintTab", "Sprints");
         }
     }
 

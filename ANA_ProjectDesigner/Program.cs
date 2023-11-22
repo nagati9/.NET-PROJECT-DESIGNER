@@ -34,6 +34,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Sprints}/{action=SprintTab}/{id?}");
+    pattern: "{controller=Profils}/{action=Login}/{id?}");
 
 app.Run();

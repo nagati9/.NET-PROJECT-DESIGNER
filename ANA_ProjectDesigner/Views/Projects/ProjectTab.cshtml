@@ -3,127 +3,84 @@
 }
 
 <!DOCTYPE html>
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: Arial, sans-serif;
-        font-size:small;
-        color: white;
-
-    }
-   .back{
-        width: 100vw; /* Full width of viewport */
-        height: 100vh; /* Full height of viewport */
-        display:flex;
-        
-        margin:0;
-        padding:0;
-        height:100%;
-        background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 50%);
-       
-          }
-
-    #NewProject{
-         width:450px;
-         height:450px;
-        background-color:black;
-        align-content:center;
-        justify-content:center;
-        justify-items: center;
-        display: flex;
-        align-self: center;
-        margin: auto;
-    }
-
-    .textBox1{
-        width:400px;
-        height: 100px;
-        background-color: #D9D9D9;
-        margin:10px;
-    }
-
-    .textBox2 {
-
-        width: 400px;
-        height: 150px;
-        margin: 10px;
-        background-color: #D9D9D9;
-    }
-
-    .pres{
-        display:flex;
-        justify-content:center;
-       
-    }
-    .submit{
-       
-        background: #B20D0D;
-        width: 80px;
-        height:40px;
-        
-
-    }
-    #bouton{
-        display: flex;
-        justify-content: center;
-        justify-items: center;
-    }
-
-        .submit:hover {
-            background: #1a2526;
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Project</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 40%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-</style>
+        .container {
+            text-align: center;
+            padding: 50px;
+            border: 1px solid white;
+            border-radius: 10px;
+            background-color: #1E1E1E;
+            width: 60%;
+        }
 
-<div class="back">
-    <div id="NewProject">
+        label {
+            display: block;
+            text-align: left; /* Alignement à gauche pour les labels */
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            min-height: 5vh;
+        }
+
+        button {
+            background-color: #ff0000;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            width:20vh;
+        }
+
+        .button {
+            margin-bottom:5%
+        }
+
+        .inputSize {
+            min-height:15vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>New Project</h2>
         <form  action="Add" method="post">
-            <p class="pres">Create a new Project</p>
-            <!--Project name-->
-            <div class="box">
-
-                    <label for="projectName" class="pres" > Project Name: </label>
-                <div class="new iconBox">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </div>
-
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-
-                    <input asp-for="Name" class="textBox1" placeholder="Project Name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="clr"></div>
+            <div class="button">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter project name">
+            </div>
+        
+            <div>
+                <label for="description">Description:</label>
+                <input type="text" class="inputSize" id="description" name="description" placeholder="Enter project description">
             </div>
 
-
-            <!--Description-->
-                <div class="box">
-
-                    <label for="projectDescrition" class="pres"> ProjectDescription: </label>
-                    <div class="new iconBox">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                    </div>
-
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-
-                        <input asp-for="Description" class="textBox2" placeholder="Add Description" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    <div class="clr"></div>
-                </div>
-
-                <div class="box" id="bouton">
-                <input type="submit" name="Submit" class="submit" value="Create" asp-action="Add" asp-controller="Projects">
-                 </div>
-
-
-         </form>
+            <button type="submit" name="Submit" >Save</button>
+        </form>
     </div>
-</div>
-
-
-
+</body>
+</html>

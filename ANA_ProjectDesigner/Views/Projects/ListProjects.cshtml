@@ -2,96 +2,79 @@
     @{
     }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 40%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
+        .outer-container {
+            background-color: #1E1E1E;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+        }
 
-    <head>
-        <style>
-            body, html {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                font-family: Arial, sans-serif;
-                font-size: small;
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .inner-container {
+            background: linear-gradient(0deg, #252323 0%, #252323 100%), #252323;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-y: auto; /* Ajout de la barre de défilement verticale si nécessaire */
+            max-height: 50vh;
+        }
+
+        .project-list-item {
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            text-align: left;
+            
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .project-list-item:hover {
+                background-color: #555; /* Gris */
                 color: white;
             }
-            .back {
-                width: 100vw; /* Full width of viewport */
-                height: 100vh; /* Full height of viewport */
-                display: flex;
-                flex-direction:column;
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                background: linear-gradient(to bottom, #3D3939 60%, #ECE0E0 50%);
+    </style>
+</head>
+<body>
+    <div class="outer-container">
+        <h1>My Projects</h1>
+
+        <div class="inner-container">
+            <div class="project-list-item">OverView</div>
+            @foreach (var project in Model)
+            {
+                <div class="project-list-item" onclick="redirectToController(@project.ProfileId)">@project.Name</div>
             }
-            .carre{
-                background-color: black;
-                display:flex;
-                justify-content:center;
-                margin: auto;
-                width:80%;
-              
-
-            }
-            .table{
-            background-color: #252323;
-                width:90%;
-            margin: 5%;
-            }
-
-            .ligne{
-                background-color: #D9D9D9;
-                margin:5%;
-                height:50px;
-                color:black;
-             
-            
-            }
-
-        .ligne:hover {
-            background: black ;
-            color:white;
-
-        }
-        </style>
-    </head>
-    <body>
-        <div class="back">
-
-            <h1>Projects</h1>
-            <div class="carre">
-            <table class="table">
-                <thead>
-                    <tr>
-                  
-                        <th scope="col">Project Name</th>
-                   
-                   
-                    </tr>
-                </thead>
-                <tbody>
-
-
-                    
-                    }@foreach (var project in Model)
-                    {
-                      
-                            <tr class="ligne">
-                                <td>@project.Name</td>
-                                <td><a href="ListProjects/@project.ProfileId">View</a></td>
-                                <!-- Add other project properties here as needed -->
-                            </tr>
-                        
-                    }
-
-                </tbody>
-            </table>
-
-            </div>      
-
-
-
-
+            <!-- Ajoutez autant d'éléments que nécessaire -->
         </div>
+    </div>
 
-    </body>
+    <script>
+        function redirectToController(projectID) {
+            window.location.href = '@Url.Action("GoToProject", "Projects")?projectId=' + projectID;
+        }
+    </script>
+</body>
+</html>
