@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ANA_ProjectDesigner.Controllers
 {
-    public class SprintsController : Controller
+    public class SprintController : Controller
     {
         private readonly MyDBContext sprintDBContext;
 
-        public SprintsController(MyDBContext sprintDBContext)
+        public SprintController(MyDBContext sprintDBContext)
         {
             this.sprintDBContext = sprintDBContext;
         }
@@ -26,8 +26,8 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpGet]
          public async Task<IActionResult> SprintTab()
          {
-             var sprints = await sprintDBContext.Sprints.ToListAsync();
-             return View(sprints);
+             var sprint = await sprintDBContext.Sprint.ToListAsync();
+             return View(sprint);
          }
 
        
@@ -35,11 +35,11 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddSprintViewModel addSprintRequest)
         {
-            var sprint = new Sprints()
+            var sprint = new Sprint()
             {
                 SprintId = Guid.NewGuid(),
                 SprintName = addSprintRequest.SprintName,
-                 //ProjectId = addSprintRequest.ProjectId,
+                ProjectId = addSprintRequest.ProjectId,
                 DateStart = addSprintRequest.DateStart,
                 DateEnd = addSprintRequest.DateEnd,
                 Comments = addSprintRequest.Comments
@@ -47,7 +47,7 @@ namespace ANA_ProjectDesigner.Controllers
 
             };
 
-            await sprintDBContext.Sprints.AddAsync(sprint);
+            await sprintDBContext.Sprint.AddAsync(sprint);
             await sprintDBContext.SaveChangesAsync();
             return RedirectToAction("ListUserProfils");
         }

@@ -71,12 +71,12 @@
     </div>
 
     <div class="main-section">
-        <form style="display:contents" asp-controller="Profils" asp-action="loginUser" method="post">
+        <form style="display:contents" asp-controller="Profil" asp-action="loginUser" method="post">
             <input required type="email" asp-for="Email" placeholder="Email Utilisateur" />
             <input required type="password" asp-for="Password" placeholder="Mot de passe" />
             <button submit>Login</button>
          </form>
-        <a href="/Profils/Register">Not a user ? Sign up</a>
+        <a href="/Profil/Register">Not a user ? Sign up</a>
     </div>
 </body>
 </html>

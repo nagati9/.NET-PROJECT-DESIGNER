@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANAProjectDesigner.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class ProfilDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231124125101_Update relationship")]
+    partial class Updaterelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace ANAProjectDesigner.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profil", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profils", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,10 +57,10 @@ namespace ANAProjectDesigner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profil");
+                    b.ToTable("Profils");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Projects", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,10 +81,10 @@ namespace ANAProjectDesigner.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprint", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprints", b =>
                 {
                     b.Property<Guid>("SprintId")
                         .ValueGeneratedOnAdd()
@@ -100,20 +103,23 @@ namespace ANAProjectDesigner.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("SprintName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SprintId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectsId");
 
-                    b.ToTable("Sprint");
+                    b.ToTable("Sprints");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Projects", b =>
                 {
-                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Profil", "Profils")
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Profils", "Profils")
                         .WithMany("projectList")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -122,23 +128,23 @@ namespace ANAProjectDesigner.Migrations
                     b.Navigation("Profils");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprint", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprints", b =>
                 {
-                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Project", "Projects")
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Projects", "Projects")
                         .WithMany("Sprints")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("ProjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Projects");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profil", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profils", b =>
                 {
                     b.Navigation("projectList");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Projects", b =>
                 {
                     b.Navigation("Sprints");
                 });

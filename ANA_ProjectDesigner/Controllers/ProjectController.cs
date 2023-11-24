@@ -3,29 +3,53 @@ using ANA_ProjectDesigner.Models.Domain;
 using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ANA_ProjectDesigner.Services.Interfaces;
 
 namespace ANA_ProjectDesigner.Controllers
 {
-    public class ProjectsController : Controller
+    public class ProjectController : Controller
     {
         private readonly MyDBContext projectDBContext;
+        private readonly IProjectsService _projectsService;
 
-        private Guid profilId;
 
-        public ProjectsController(MyDBContext projectDBContext)
+        public ProjectController(MyDBContext projectDBContext, IProjectsService projectsService)
         {
+       
             this.projectDBContext = projectDBContext;
+            _projectsService = projectsService;
         }
 
-        
-        
+
+
 
         [HttpGet]
         public IActionResult ProjectTab(Guid profilUserId)
         {
            return View();
-
            // return RedirectToAction("Welcome");
+        }
+
+        //[HttpGet("{id}")] // Permet de récupérer l'ID depuis la route à tester
+        [HttpGet]
+        public IActionResult ProjectDetail(Guid projectID /*, [FromRoute] Guid id*/)
+        {
+
+            ViewBag.projectId = projectID;
+            //projectDBContext.Projects.Include(project => project.Sprints).
+            DateTime today = DateTime.Now.Date;
+
+            // Récupérer le sprint en cours avec la date d'aujourd'hui entre startDate et endDate
+            /*Sprints currentSprint = projectDBContext.Sprints
+                .Include(s => s.Project) // Inclure les informations du projet lié au sprint si nécessaire
+                .FirstOrDefault(s => s.DateStart <= today && s.DateEnd >= today);
+
+            if (currentSprint == null)
+            {
+                return NotFound("Aucun sprint en cours pour aujourd'hui.");
+            }*/
+            return View();
+            // return RedirectToAction("Welcome");
         }
         [HttpGet]
         public async Task<IActionResult> ListProjects()
@@ -34,7 +58,7 @@ namespace ANA_ProjectDesigner.Controllers
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
-                var projects = await projectDBContext.Projects.Where(p => p.ProfileId == profilUserId).ToListAsync();
+                var projects = await projectDBContext.Project.Where(p => p.ProfileId == profilUserId).ToListAsync();
                 return View(projects);
             }
             return View();
@@ -47,7 +71,7 @@ namespace ANA_ProjectDesigner.Controllers
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
-                var project = new Projects()
+                var project = new Project()
                 {
                     Id = Guid.NewGuid(),
                     Name = addProfilRequest.Name,
@@ -55,11 +79,11 @@ namespace ANA_ProjectDesigner.Controllers
                     ProfileId = profilUserId
                 };
 
-                await projectDBContext.Projects.AddAsync(project);
+                await projectDBContext.Project.AddAsync(project);
                 await projectDBContext.SaveChangesAsync();
             }
 
-            return RedirectToAction("Welcome","Profils");
+            return RedirectToAction("Welcome","Profil");
         }
 
         [HttpPost]
@@ -72,7 +96,7 @@ namespace ANA_ProjectDesigner.Controllers
 
             }*/
 
-            return RedirectToAction("SprintTab", "Sprints");
+            return RedirectToAction("SprintTab", "Sprint");
         }
     }
 

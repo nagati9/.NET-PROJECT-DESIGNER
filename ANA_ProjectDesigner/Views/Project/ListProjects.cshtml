@@ -1,4 +1,4 @@
-﻿    @model List<ANA_ProjectDesigner.Models.Domain.Projects>
+﻿    @model List<ANA_ProjectDesigner.Models.Domain.Project>
     @{
     }
 
@@ -65,15 +65,15 @@
             <div class="project-list-item">OverView</div>
             @foreach (var project in Model)
             {
-                <div class="project-list-item" onclick="redirectToController(@project.ProfileId)">@project.Name</div>
+                <div class="project-list-item" onclick="redirectToController('@project.Id', '@Url.Action("ProjectDetail", "Project")')">@project.Name</div>
             }
             <!-- Ajoutez autant d'éléments que nécessaire -->
         </div>
     </div>
 
     <script>
-        function redirectToController(projectID) {
-            window.location.href = '@Url.Action("GoToProject", "Projects")?projectId=' + projectID;
+        function redirectToController(projectID, url) {
+            window.location.href = url + '?projectId=' + projectID;
         }
     </script>
 </body>

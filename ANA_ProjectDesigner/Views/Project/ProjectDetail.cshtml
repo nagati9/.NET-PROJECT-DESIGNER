@@ -1,0 +1,339 @@
+﻿ @model ANA_ProjectDesigner.Models.Domain.Project
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Votre Page</title>
+    <style>
+        body {
+            background-color: #ECE0E0;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: row; /* Modification de l'orientation à l'horizontale */
+        }
+
+        .container {
+            margin: 5px;
+            padding: 10px;
+        }
+
+        .container1 {
+            flex: 0.6;
+            width: 100%; /* Agrandir la taille du select pour remplir le conteneur */
+            background: transparent; /* Rendre le fond du select transparent */
+            font-size: 16px;
+        }
+
+        .container2 {
+            flex: 0.3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container3 {
+            flex: 0.4;
+            background-color: #3D3939;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .navigation-container {
+            /* Nouvelle div qui encapsule les divs de la barre de navigation et la table */
+            display: flex;
+            flex-direction: column; /* Orientation verticale */
+            width: 100%;
+        }
+
+        .navigation-bar {
+            color: #3D3939;
+            display: flex;
+        }
+
+
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px; /* Espacement de 20px entre les onglets */
+            color: 3D3939; /* Couleur par défaut des onglets */
+            background-color: transparent; /* Fond transparent par défaut */
+            transition: background-color 0.3s; /* Ajout d'une transition pour une animation douce */
+            margin-left:1px;
+        }
+
+            .tab:hover {
+                background-color: #3D3939; /* Couleur de fond gris lors du survol */
+                color: white;
+            }
+
+        .selected-tab {
+            color:white;
+            background-color: #3D3939; /* Couleur de fond des onglets sélectionnés */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        select {
+            font-size: 32px;
+            background:transparent;
+            border: transparent;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3D3939;
+            color: white;
+        }
+
+        /* Style ajouté aux boutons */
+        .container2 button {
+            background-color: red;
+            color: white;
+            height: 5vh;
+            margin-bottom: 10px; /* Espacement entre les boutons */
+            cursor: pointer; /* Curseur indiquant que le bouton est cliquable */
+        }
+
+        /* Style pour la pop-up */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #1E1E1E;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+            .popup h2 {
+                color: white;
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .popup button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .popup button:hover {
+                    background-color: #45a049;
+                }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-groupbis {
+            margin-bottom: 15px;
+            display:flex;
+            justify-content: space-between
+        }
+
+            .form-groupbis label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+            color: white;
+        }
+
+            .form-groupbis input,
+            .form-groupbis textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background: #d9d9d969;
+        }
+
+        
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                text-align: left;
+                color: white;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background: #d9d9d969;
+                font-size: 14px;
+            }
+
+            .form-group textarea {
+                resize: vertical;
+            }
+
+        /* Style pour l'arrière-plan obscurci de la pop-up */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Groupe de conteneurs enfants 1, 2, et 3 -->
+        <div class="container container1">
+            <!-- Premier container -->
+            <select>
+                <option value="item1">Item 1</option>
+                <option value="item2">Item 2</option>
+                <option value="item3">Item 3</option>
+            </select>
+        </div>
+
+        <div class="container container2">
+            <!-- Deuxième container -->
+            <button onclick="openPopup('Contenu de la pop-up pour le bouton 1')">Add Sprint</button>
+            <button onclick="openPopup('Contenu de la pop-up pour le bouton 2')">Delete sprint</button>
+            <button onclick="openPopup('Contenu de la pop-up pour le bouton 3')">Edit sprint</button>
+        </div>
+
+        <div class="container container3">
+            <!-- Troisième container -->
+            <p>Date du jour</p>
+            <p>Numéro du sprint</p>
+        </div>
+    </div>
+
+    <!-- Groupe de la barre de navigation et de la table -->
+    <div class="navigation-container">
+        <!-- Barre de navigation -->
+        <div class="navigation-bar">
+            <div class="tab sprints selected-tab" onclick="changeList('Sprints')">Sprints</div>
+            <div class="tab tasks" onclick="changeList('Tasks')">Tasks</div>
+            <div class="tab backlog" onclick="changeList('Backlog')">Backlog</div>
+        </div>
+
+        <!-- Tableau -->
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>Id sprint</th>
+                    <th>Sprint Number</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Div pour la pop-up -->
+    <div class="popup" id="popup">
+        <h2>Ajouter un sprint</h2>
+        <form asp-action="Add" asp-controller="Sprint" method="post">
+
+            <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+            <div class="form-group">
+                <label for="sprintNumber">Sprint Number</label>
+                <input type="number" id="sprintNumber" name="sprintNumber">
+            </div>
+
+            <div class="form-group">
+                <label for="sprintName">Sprint Name</label>
+                <input type="text" id="sprintName" name="sprintName">
+            </div>
+
+            <div class="form-groupbis">
+                <div>
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+                <div>
+                    <label for="endDate" style="margin-left: 15px;">End Date</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Comments</label>
+                <textarea id="comments" name="comments"></textarea>
+            </div>
+
+            <button type="submit" onclick="saveSprint()">Enregistrer</button>
+        </form>
+    </div>
+
+    <!-- Div pour l'arrière-plan obscurci de la pop-up -->
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <script>
+        // Fonction pour ouvrir la pop-up
+        function openPopup(content) {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Fonction pour fermer la pop-up
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function saveSprint() {
+            closePopup();
+        }
+
+        // Fonction pour changer la liste en fonction de l'onglet cliqué
+        function changeList(tab) {
+            // Réinitialiser la couleur de tous les onglets
+            var tabs = document.querySelectorAll('.tab');
+            tabs.forEach(function (t) {
+                t.classList.remove('selected-tab');
+            });
+
+            // Appliquer la classe de sélection à l'onglet cliqué
+            var selectedTab = document.querySelector('.tab.' + tab.toLowerCase());
+            selectedTab.classList.add('selected-tab');
+
+            // Mettre à jour la liste en fonction de l'onglet cliqué
+            // Ici, vous devriez ajouter votre logique pour mettre à jour la liste en fonction de l'onglet sélectionné
+        }
+    </script>
+</body>
+</html>

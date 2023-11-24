@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ANA_ProjectDesigner.Models.Domain
 {
-    public class Sprints
+    public class Sprint
     {
 [Key] public Guid SprintId { get; set; }
         public string SprintName { get; set; }
@@ -15,8 +15,8 @@ namespace ANA_ProjectDesigner.Models.Domain
 
         //ref
         public Guid ProjectId { get; set; }
-        [ForeignKey("ProjectId")]
-        public virtual Projects Projects { get; set; }
+
+        public virtual Project Projects { get; set; }
 
     }
 }

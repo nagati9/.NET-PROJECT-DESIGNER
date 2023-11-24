@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANAProjectDesigner.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class ProfilDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231124131337_Update Table Name")]
+    partial class UpdateTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace ANAProjectDesigner.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profil", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profils", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +57,7 @@ namespace ANAProjectDesigner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profil");
+                    b.ToTable("Profils");
                 });
 
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
@@ -113,7 +116,7 @@ namespace ANAProjectDesigner.Migrations
 
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
                 {
-                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Profil", "Profils")
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Profils", "Profils")
                         .WithMany("projectList")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -133,7 +136,7 @@ namespace ANAProjectDesigner.Migrations
                     b.Navigation("Projects");
                 });
 
-            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profil", b =>
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profils", b =>
                 {
                     b.Navigation("projectList");
                 });

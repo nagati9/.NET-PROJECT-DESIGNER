@@ -9,9 +9,9 @@ namespace ANA_ProjectDesigner.Data
         {
         }
 
-        public  DbSet<Profils>  Profils { get; set; }
-        public DbSet<Projects> Projects { get; set; }
-        public DbSet<Sprints> Sprints { get; set; }
+        public  DbSet<Profil>  Profil { get; set; }
+        public DbSet<Project> Project { get; set; }
+        public DbSet<Sprint> Sprint { get; set; }
     }
 
 }

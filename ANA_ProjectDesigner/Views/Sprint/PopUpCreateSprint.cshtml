@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="popup" id="popup">
+    <h2>Ajouter un sprint</h2>
+    <div class="form-group">
+        <label for="sprintNumber">Sprint Number</label>
+        <input type="number" id="sprintNumber" name="sprintNumber">
+    </div>
+
+    <div class="form-group">
+        <label for="sprintName">Sprint Name</label>
+        <input type="text" id="sprintName" name="sprintName">
+    </div>
+
+    <div class="form-groupbis">
+        <div>
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" name="startDate">
+        </div>
+        <div>
+            <label for="endDate" style="margin-left: 15px;">End Date</label>
+            <input type="date" id="endDate" name="endDate">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comments">Comments</label>
+        <textarea id="comments" name="comments"></textarea>
+    </div>
+
+    <button type="submit" onclick="saveSprint()">Enregistrer</button>
+</div>

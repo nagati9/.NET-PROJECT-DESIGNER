@@ -2,7 +2,7 @@
 
 namespace ANA_ProjectDesigner.Models.Domain
 {
-    public class Projects
+    public class Project
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -10,10 +10,15 @@ namespace ANA_ProjectDesigner.Models.Domain
 
         //Linking to profils 1..*
         public Guid ProfileId { get; set; }
+
+
         [ForeignKey("ProfileId")]
-        public virtual Profils Profils { get; set; }
-        
+        public virtual Profil Profil { get; set; }
+
+
+        public virtual List<Sprint> Sprints { get; set; }
+
         //linking to sprints 1..*
-        public virtual List<Sprints> Sprints { get; set; }
+        //public virtual List<Sprints> Sprints { get; set; }
     }
 }
