@@ -15,7 +15,6 @@ namespace ANA_ProjectDesigner.Models.Domain
         [ForeignKey("ProfileId")]
         public virtual Profil Profil { get; set; }
 
-
         public virtual List<Sprint> Sprints { get; set; }
 
         //linking to sprints 1..*

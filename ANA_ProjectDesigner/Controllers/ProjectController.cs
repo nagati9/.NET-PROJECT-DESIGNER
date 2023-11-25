@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ANA_ProjectDesigner.Services.Interfaces;
+using Microsoft.CodeAnalysis;
 
 namespace ANA_ProjectDesigner.Controllers
 {
@@ -32,24 +33,35 @@ namespace ANA_ProjectDesigner.Controllers
 
         //[HttpGet("{id}")] // Permet de récupérer l'ID depuis la route à tester
         [HttpGet]
-        public IActionResult ProjectDetail(Guid projectID /*, [FromRoute] Guid id*/)
+        public IActionResult ProjectDetail(Guid projectID, Guid sprintID /*, [FromRoute] Guid id*/)
         {
 
             ViewBag.projectId = projectID;
-            //projectDBContext.Projects.Include(project => project.Sprints).
-            DateTime today = DateTime.Now.Date;
 
-            // Récupérer le sprint en cours avec la date d'aujourd'hui entre startDate et endDate
-            /*Sprints currentSprint = projectDBContext.Sprints
-                .Include(s => s.Project) // Inclure les informations du projet lié au sprint si nécessaire
-                .FirstOrDefault(s => s.DateStart <= today && s.DateEnd >= today);
 
-            if (currentSprint == null)
+            // GET Projects
+            string profilId = HttpContext.Session.GetString("idUser");
+            var listProject = projectDBContext.Project
+                    .Where(p => p.Id != projectID && p.ProfileId == new Guid(profilId))
+                    .ToList();
+            ViewBag.listProject = listProject;
+
+            //GET Sprints
+            var projectWithSprints = projectDBContext.Project
+            .Include(p => p.Sprints)
+            .FirstOrDefault(p => p.Id == projectID);
+
+            if (projectWithSprints != null)
             {
-                return NotFound("Aucun sprint en cours pour aujourd'hui.");
-            }*/
-            return View();
-            // return RedirectToAction("Welcome");
+                var sprintsForProject = projectWithSprints.Sprints
+                    .OrderBy(s => s.DateStart)
+                    .ThenBy(s => s.DateEnd)
+                    .ToList();
+
+                ViewBag.listSprints = sprintsForProject;
+            }
+
+            return View(projectWithSprints);
         }
         [HttpGet]
         public async Task<IActionResult> ListProjects()
@@ -71,7 +83,7 @@ namespace ANA_ProjectDesigner.Controllers
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
-                var project = new Project()
+                var project = new Models.Domain.Project()
                 {
                     Id = Guid.NewGuid(),
                     Name = addProfilRequest.Name,

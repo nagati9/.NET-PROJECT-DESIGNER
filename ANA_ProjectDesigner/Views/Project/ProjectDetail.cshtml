@@ -122,7 +122,7 @@
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            max-width: 400px;
+            max-width: 600px;
             width: 100%;
             text-align: center;
         }
@@ -210,25 +210,52 @@
             background-color: rgba(0, 0, 0, 0.8);
             z-index: 999;
         }
+
+        .table-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sprint-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            .sprint-table th, .sprint-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+                color:white;
+            }
+
+        .select-checkbox {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="main-container">
         <!-- Groupe de conteneurs enfants 1, 2, et 3 -->
         <div class="container container1">
-            <!-- Premier container -->
-            <select>
-                <option value="item1">Item 1</option>
-                <option value="item2">Item 2</option>
-                <option value="item3">Item 3</option>
-            </select>
+            <form id="projectForm" asp-controller="Project" asp-action="ProjectDetail" method="post">
+                <input type="hidden" id="selectedProjectId" name="Id" value="@ViewBag.projectId" />
+                <!-- Premier container -->
+                <select name="selectedProject" onchange="updateProjectIdSelected(this)">
+                    <option value="@ViewBag.projectId">@Model.Name</option>
+                    @foreach (var project in @ViewBag.listProject)
+                    {
+                        <option value="@project.Id">@project.Name</option>
+                    }
+                </select>
+            </form>
         </div>
 
         <div class="container container2">
             <!-- Deuxième container -->
-            <button onclick="openPopup('Contenu de la pop-up pour le bouton 1')">Add Sprint</button>
-            <button onclick="openPopup('Contenu de la pop-up pour le bouton 2')">Delete sprint</button>
-            <button onclick="openPopup('Contenu de la pop-up pour le bouton 3')">Edit sprint</button>
+            <button onclick="openPopup('Add')">Add Sprint</button>
+            <button onclick="openPopup('Delete')">Delete sprint</button>
+            <button onclick="openPopup('Edit')">Edit sprint</button>
         </div>
 
         <div class="container container3">
@@ -251,14 +278,23 @@
         <table id="table">
             <thead>
                 <tr>
-                    <th>Id sprint</th>
-                    <th>Sprint Number</th>
+                    <th>Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
+                    <th>Comments</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
+                @foreach (var sprint in @ViewBag.listSprints)
+                {
+                    <tr>
+                        <td>@sprint.SprintName</td>
+                        <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                        <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                        <td>@sprint.Comments</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -269,10 +305,6 @@
         <form asp-action="Add" asp-controller="Sprint" method="post">
 
             <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
-            <div class="form-group">
-                <label for="sprintNumber">Sprint Number</label>
-                <input type="number" id="sprintNumber" name="sprintNumber">
-            </div>
 
             <div class="form-group">
                 <label for="sprintName">Sprint Name</label>
@@ -282,11 +314,11 @@
             <div class="form-groupbis">
                 <div>
                     <label for="startDate">Start Date</label>
-                    <input type="date" id="startDate" name="startDate">
+                    <input type="date" id="startDate" name="DateStart" asp-format="{0:yyyy-MM-dd}">
                 </div>
                 <div>
                     <label for="endDate" style="margin-left: 15px;">End Date</label>
-                    <input type="date" id="endDate" name="endDate">
+                    <input type="date" id="endDate" name="DateEnd" asp-format="{0:yyyy-MM-dd}">
                 </div>
             </div>
 
@@ -299,18 +331,76 @@
         </form>
     </div>
 
+    <!-- Div pour la pop-up -->
+    <div class="popup" id="popupDelete">
+        <h2>Delete a sprint</h2>
+        <form asp-action="DeleteSprint" asp-controller="Sprint" method="post" onsubmit="return prepareDeleteForm()">
+            <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+            <div class="table-container">
+                <table class="sprint-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Sprint Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sprint in @ViewBag.listSprints)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="select-checkbox" data-sprint-number="@sprint.SprintId" onchange="updateDeleteButtonState()" />
+                                </td>
+                                <td>@sprint.SprintName</td>
+                                <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                                <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <input type="hidden" id="SprintIdToDelete" name="SprintId" value="">
+            <button type="submit" id="deleteButton" onclick="saveSprint()" disabled>Supprimer</button>
+        </form>
+    </div>
+
     <!-- Div pour l'arrière-plan obscurci de la pop-up -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
     <script>
+        // Fonction pour retourner l'ID du project selectionné
+        function updateProjectIdSelected(select) {
+            var selectedValue = select.value;
+            console.log(selectedValue);
+            document.getElementById('selectedProjectId').value = selectedValue;
+            document.getElementById('projectForm').submit();
+            window.location.href = '/Project/ProjectDetail?projectId=' + selectedValue;
+        }
+
         // Fonction pour ouvrir la pop-up
         function openPopup(content) {
-            document.getElementById('popup').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
+            switch (content) {
+                case 'Add':
+                    document.getElementById('popup').style.display = 'block';
+                    break;
+                case 'Delete':
+                    document.getElementById('popupDelete').style.display = 'block';
+                    break;
+                case 'Papayas':
+                    document.getElementById('popupEdit').style.display = 'block';
+                    break;
+                default:
+                    console.log(`Content not found`);
+            }
         }
 
         // Fonction pour fermer la pop-up
         function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupDelete').style.display = 'none';
             document.getElementById('popup').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
@@ -331,9 +421,43 @@
             var selectedTab = document.querySelector('.tab.' + tab.toLowerCase());
             selectedTab.classList.add('selected-tab');
 
-            // Mettre à jour la liste en fonction de l'onglet cliqué
-            // Ici, vous devriez ajouter votre logique pour mettre à jour la liste en fonction de l'onglet sélectionné
+        }
+
+        // Fonction pour activer/désactiver le bouton en fonction de la sélection des checkboxes
+        function updateDeleteButtonState() {
+            var checkboxes = document.querySelectorAll('.select-checkbox');
+            var deleteButton = document.getElementById('deleteButton');
+
+            var atLeastOneCheckboxSelected = false;
+            var moreThanOneCheckboxSelected = false;
+
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    if (atLeastOneCheckboxSelected) {
+                        moreThanOneCheckboxSelected = true;
+                    } else {
+                        atLeastOneCheckboxSelected = true;
+                    }
+                }
+            });
+
+            deleteButton.disabled = !atLeastOneCheckboxSelected || moreThanOneCheckboxSelected;
+        }
+
+        function prepareDeleteForm() {
+            var checkboxes = document.querySelectorAll('.select-checkbox:checked');
+            var sprintIdInput = document.getElementById('SprintIdToDelete');
+
+            if (checkboxes.length === 1) {
+                sprintIdInput.value = checkboxes[0].getAttribute('data-sprint-number');
+                return true; // Continuer avec la soumission du formulaire
+            } else {
+                alert("Please select exactly one sprint to delete.");
+                return false; // Annuler la soumission du formulaire
+            }
         }
     </script>
+
+
 </body>
 </html>
