@@ -1,0 +1,302 @@
+﻿body {
+    background-color: #ECE0E0;
+    color: black;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row; /* Modification de l'orientation à l'horizontale */
+}
+
+.container {
+    margin: 5px;
+    padding: 10px;
+}
+
+.container1 {
+    flex: 0.6;
+    width: 100%; /* Agrandir la taille du select pour remplir le conteneur */
+    background: transparent; /* Rendre le fond du select transparent */
+    font-size: 16px;
+}
+
+.container2 {
+    flex: 0.3;
+    display: flex;
+    flex-direction: column;
+}
+
+.container3 {
+    flex: 0.4;
+    background-color: #3D3939;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.navigation-container {
+    /* Nouvelle div qui encapsule les divs de la barre de navigation et la table */
+    display: flex;
+    flex-direction: column; /* Orientation verticale */
+    width: 100%;
+}
+
+.navigation-bar {
+    color: #3D3939;
+    display: flex;
+}
+
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px; /* Espacement de 20px entre les onglets */
+    color: 3D3939; /* Couleur par défaut des onglets */
+    background-color: transparent; /* Fond transparent par défaut */
+    transition: background-color 0.3s; /* Ajout d'une transition pour une animation douce */
+    margin-left: 1px;
+}
+
+    .tab:hover {
+        background-color: #3D3939; /* Couleur de fond gris lors du survol */
+        color: white;
+    }
+
+.selected-tab {
+    color: white;
+    background-color: #3D3939; /* Couleur de fond des onglets sélectionnés */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+select {
+    font-size: 32px;
+    background: transparent;
+    border: transparent;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th, td, input {
+    background: transparent;
+}
+
+th {
+    background-color: #3D3939;
+    color: white;
+}
+
+/* Style ajouté aux boutons */
+.container2 button {
+    background-color: red;
+    color: white;
+    height: 5vh;
+    margin-bottom: 10px; /* Espacement entre les boutons */
+    cursor: pointer; /* Curseur indiquant que le bouton est cliquable */
+}
+
+.selectButton {
+    background-color: red;
+    color: white;
+    text-align: center;
+    font-size: inherit;
+    height: 5vh;
+    border: 2px solid;
+    border-color: black;
+}
+
+.container2 select {
+    background-color: red;
+    color: white;
+    height: 5vh;
+    margin-bottom: 10px; /* Espacement entre les boutons */
+    cursor: pointer; /* Curseur indiquant que le bouton est cliquable */
+}
+
+/* Style pour la pop-up */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #1E1E1E;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+    .popup h2 {
+        color: white;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .popup button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .popup button:hover {
+            background-color: #45a049;
+        }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-groupbis {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between
+}
+
+    .form-groupbis label {
+        display: block;
+        margin-bottom: 5px;
+        text-align: left;
+        color: white;
+    }
+
+    .form-groupbis input,
+    .form-groupbis textarea {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        background: #d9d9d969;
+    }
+
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+    color: white;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #d9d9d969;
+    font-size: 14px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Style pour l'arrière-plan obscurci de la pop-up */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+}
+
+.table-container {
+    margin-bottom: 20px;
+}
+
+.sprint-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .sprint-table th, .sprint-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        color: white;
+    }
+
+.select-checkbox {
+    cursor: pointer;
+}
+
+.current-sprint-row {
+    background-color: #FFDADA; /* Une couleur de fond rouge pâle */
+    font-weight: bold; /* Texte en gras pour attirer l'attention */
+    cursor: not-allowed; /* Curseur non autorisé pour indiquer qu'elle n'est pas sélectionnable */
+}
+
+/* Style pour les lignes de sprint sélectionnables */
+.selectable-row {
+    cursor: pointer; /* Curseur pointeur pour indiquer que la ligne est sélectionnable */
+    background-color: #3D3939;
+    color:white;
+    transition: background-color 0.3s; /* Transition pour une animation douce du changement de couleur de fond */
+}
+
+    /* Au survol, changez la couleur de fond pour indiquer qu'il est sélectionnable */
+    .selectable-row:hover {
+        background-color: #F2F2F2; /* Une couleur de fond légèrement différente au survol */
+    }
+
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style de base pour le bouton de sélection */
+.dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Style de base pour la liste déroulante (initialement cachée) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    /* Style des éléments de la liste déroulante */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        /* Style au survol des éléments de la liste déroulante */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }

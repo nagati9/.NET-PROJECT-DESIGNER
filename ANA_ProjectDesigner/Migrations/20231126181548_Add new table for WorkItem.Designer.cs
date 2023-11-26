@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANAProjectDesigner.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class ProfilDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231126181548_Add new table for WorkItem")]
+    partial class AddnewtableforWorkItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,15 +174,9 @@ namespace ANAProjectDesigner.Migrations
                     b.Property<int>("OriginalEstimate")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SprintId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
                     b.HasKey("WorkItemId", "RessourceId");
 
                     b.HasIndex("RessourceId");
-
-                    b.HasIndex("SprintId");
 
                     b.ToTable("WorkItemRessource");
                 });
@@ -232,12 +229,6 @@ namespace ANAProjectDesigner.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Sprint", "Sprint")
-                        .WithMany()
-                        .HasForeignKey("SprintId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ANA_ProjectDesigner.Models.Domain.WorkItem", "WorkItem")
                         .WithMany("WorkItemRessources")
                         .HasForeignKey("WorkItemId")
@@ -245,8 +236,6 @@ namespace ANAProjectDesigner.Migrations
                         .IsRequired();
 
                     b.Navigation("Ressource");
-
-                    b.Navigation("Sprint");
 
                     b.Navigation("WorkItem");
                 });

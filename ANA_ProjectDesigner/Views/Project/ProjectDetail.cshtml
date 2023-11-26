@@ -1,5 +1,6 @@
 ﻿ @model ANA_ProjectDesigner.Models.Domain.Project
 @{
+    int i = 1;
 }
 
 <!DOCTYPE html>
@@ -7,232 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Votre Page</title>
-    <style>
-        body {
-            background-color: #ECE0E0;
-            color: black;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .main-container {
-            display: flex;
-            flex-direction: row; /* Modification de l'orientation à l'horizontale */
-        }
-
-        .container {
-            margin: 5px;
-            padding: 10px;
-        }
-
-        .container1 {
-            flex: 0.6;
-            width: 100%; /* Agrandir la taille du select pour remplir le conteneur */
-            background: transparent; /* Rendre le fond du select transparent */
-            font-size: 16px;
-        }
-
-        .container2 {
-            flex: 0.3;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container3 {
-            flex: 0.4;
-            background-color: #3D3939;
-            color: white;
-            text-align: center;
-            padding: 10px;
-        }
-
-        .navigation-container {
-            /* Nouvelle div qui encapsule les divs de la barre de navigation et la table */
-            display: flex;
-            flex-direction: column; /* Orientation verticale */
-            width: 100%;
-        }
-
-        .navigation-bar {
-            color: #3D3939;
-            display: flex;
-        }
-
-
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px; /* Espacement de 20px entre les onglets */
-            color: 3D3939; /* Couleur par défaut des onglets */
-            background-color: transparent; /* Fond transparent par défaut */
-            transition: background-color 0.3s; /* Ajout d'une transition pour une animation douce */
-            margin-left:1px;
-        }
-
-            .tab:hover {
-                background-color: #3D3939; /* Couleur de fond gris lors du survol */
-                color: white;
-            }
-
-        .selected-tab {
-            color:white;
-            background-color: #3D3939; /* Couleur de fond des onglets sélectionnés */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        select {
-            font-size: 32px;
-            background:transparent;
-            border: transparent;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #3D3939;
-            color: white;
-        }
-
-        /* Style ajouté aux boutons */
-        .container2 button {
-            background-color: red;
-            color: white;
-            height: 5vh;
-            margin-bottom: 10px; /* Espacement entre les boutons */
-            cursor: pointer; /* Curseur indiquant que le bouton est cliquable */
-        }
-
-        /* Style pour la pop-up */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: #1E1E1E;
-            border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
-
-            .popup h2 {
-                color: white;
-                font-size: 20px;
-                margin-bottom: 20px;
-            }
-
-            .popup button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 14px;
-            }
-
-            .popup button:hover {
-                    background-color: #45a049;
-                }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-groupbis {
-            margin-bottom: 15px;
-            display:flex;
-            justify-content: space-between
-        }
-
-            .form-groupbis label {
-            display: block;
-            margin-bottom: 5px;
-            text-align: left;
-            color: white;
-        }
-
-            .form-groupbis input,
-            .form-groupbis textarea {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            background: #d9d9d969;
-        }
-
-        
-
-            .form-group label {
-                display: block;
-                margin-bottom: 5px;
-                text-align: left;
-                color: white;
-            }
-
-            .form-group input,
-            .form-group textarea {
-                width: 100%;
-                padding: 10px;
-                box-sizing: border-box;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                background: #d9d9d969;
-                font-size: 14px;
-            }
-
-            .form-group textarea {
-                resize: vertical;
-            }
-
-        /* Style pour l'arrière-plan obscurci de la pop-up */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-        }
-
-        .table-container {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .sprint-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-            .sprint-table th, .sprint-table td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-                color:white;
-            }
-
-        .select-checkbox {
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="~/css/projectDetail.css">
 </head>
 <body>
     <div class="main-container">
@@ -242,7 +18,7 @@
                 <input type="hidden" id="selectedProjectId" name="Id" value="@ViewBag.projectId" />
                 <!-- Premier container -->
                 <select name="selectedProject" onchange="updateProjectIdSelected(this)">
-                    <option value="@ViewBag.projectId">@Model.Name</option>
+                    <option value="@ViewBag.projectId">TO BE DONE</option>
                     @foreach (var project in @ViewBag.listProject)
                     {
                         <option value="@project.Id">@project.Name</option>
@@ -251,17 +27,37 @@
             </form>
         </div>
 
-        <div class="container container2">
+        <div id="sprintsButton" class="container container2 " style="display:flex">
             <!-- Deuxième container -->
             <button onclick="openPopup('Add')">Add Sprint</button>
             <button onclick="openPopup('Delete')">Delete sprint</button>
             <button onclick="openPopup('Edit')">Edit sprint</button>
         </div>
 
+        <div id="tasksButton" class="container container2 " style="display:none">
+            <select class="selectButton" name="selectedProject" onchange="openPopupTask(this)">
+                <option value="default">Add</option>
+                <option value="Ressource">Ressource</option>
+                <option value="ItemType">WorkItem</option>
+            </select>
+            <!-- Deuxième container -->
+            <button onclick="openPopup('Delete')">Delete</button>
+            <button onclick="openPopup('Edit')">Edit</button>
+        </div>
+
         <div class="container container3">
             <!-- Troisième container -->
-            <p>Date du jour</p>
-            <p>Numéro du sprint</p>
+            @if (@ViewBag.currentSprint != null)
+            {
+                <p>Sprint date : @ViewBag.currentSprint.DateStart.ToString("dd MMMM") - @ViewBag.currentSprint.DateEnd.ToString("dd MMMM")</p>
+                <p>Sprint name : @ViewBag.currentSprint.SprintName</p>
+            }
+            else
+            {
+                <!-- Code à exécuter si la condition est fausse -->
+                <p>No existing sprint</p>
+            }
+
         </div>
     </div>
 
@@ -274,29 +70,151 @@
             <div class="tab backlog" onclick="changeList('Backlog')">Backlog</div>
         </div>
 
-        <!-- Tableau -->
-        <table id="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
-                @foreach (var sprint in @ViewBag.listSprints)
-                {
-                    <tr>
-                        <td>@sprint.SprintName</td>
-                        <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
-                        <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
-                        <td>@sprint.Comments</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <!-- Tableau Sprint -->
+        <div class="table-container sprints-table" style="display: block;">
+            <form id="sprintForm" asp-controller="Project" asp-action="ProjectDetail" method="get">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (@ViewBag?.listSprints != null)
+                        {
+
+                            <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
+                            @foreach (var sprint in @ViewBag.listSprints)
+                            {
+                                <tr class="@(sprint.SprintId == @ViewBag.currentSprint.SprintId ? "current-sprint-row" : "selectable-row")" onclick="selectSprint('@sprint.SprintId')">
+                                    <td style="display:none">@sprint.SprintId</td>
+                                    <td>@sprint.SprintName</td>
+                                    <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                                    <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                                    <td>@sprint.Comments</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
+                <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+            </form>
+        </div>
+
+        <!-- Tableau Task -->
+        <div class="table-container tasks-table" style="display: none;">
+            @if (@ViewBag.workItem != null)
+            {
+                <form class="time-form" asp-controller="WorkItem" asp-action="UpdateTaskTime" method="post">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Type</th>
+                                <th>Task</th>
+                                @if (@ViewBag.ressources != null)
+                                {
+                                    foreach (var ressource in @ViewBag.ressources)
+                                    {
+                                        <th>@ressource.Name</th>
+                                    }
+                                }
+                                <th>Time per task</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ligne du tableau ajoutée dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
+                            @{
+                                var rowIndex = 1;
+                                foreach (var workItem in @ViewBag.workItem)
+                                {
+                                    <tr>
+                                        <td>@rowIndex</td>
+                                        <td>@workItem.TaskType</td>
+                                        <td>@workItem.TaskName</td>
+                                        @if (@ViewBag.ressources != null)
+                                        {
+                                            foreach (var ressource in @ViewBag.ressources)
+                                            {
+                                                // Recherche manuelle de la correspondance dans ViewBag.RessourceWorkItem
+                                                var OriginalEstimated = 0;
+                                                @if (@ViewBag.WorkItemRessource != null)
+                                                {
+
+                                                    foreach (var item in ViewBag.WorkItemRessource)
+                                                    {
+                                                        @if (item.WorkItemId == workItem.Id && item.RessourceId == ressource.Id)
+                                                        {
+                                                            OriginalEstimated = item.OriginalEstimate;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
+                                            }
+                                        }
+                                        <!-- Ajoutez un champ caché pour l'ID de la tâche -->
+                                        <input type="hidden" name="taskId" value="@workItem.Id" />
+                                        <input type="hidden" name="projectId" value="@ViewBag.projectId" />
+                                        <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                    </tr>
+                                    rowIndex++;
+                                }
+                            }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Max Capacity</td>
+                                @if (@ViewBag.ressources != null)
+                                {
+                                    foreach (var ressource in @ViewBag.ressources)
+                                    {
+                                        <td>@(ressource.Capacity)</td>
+                                    }
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" value="Submit" />
+                </form>
+            }
+        </div>
+
+        <!-- Tableau Task -->
+        <div class="table-container backlog-table" style="display: none;">
+            <form id="sprintForm" asp-controller="Project" asp-action="ProjectDetail" method="get">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (@ViewBag.listSprints != null)
+                        {
+                            <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
+                            @foreach (var sprint in @ViewBag.listSprints)
+                            {
+                                <tr class="@(sprint.SprintId == @ViewBag.currentSprint.SprintId ? "current-sprint-row" : "selectable-row")" onclick="selectSprint('@sprint.SprintId')">
+                                    <td style="display:none">@sprint.SprintId</td>
+                                    <td>@sprint.SprintName</td>
+                                    <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                                    <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
+                <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+            </form>
+        </div>
     </div>
 
     <!-- Div pour la pop-up -->
@@ -347,16 +265,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sprint in @ViewBag.listSprints)
+                        @if (@ViewBag.listSprints != null)
                         {
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="select-checkbox" data-sprint-number="@sprint.SprintId" onchange="updateDeleteButtonState()" />
-                                </td>
-                                <td>@sprint.SprintName</td>
-                                <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
-                                <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
-                            </tr>
+                            @foreach (var sprint in @ViewBag.listSprints)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="select-checkbox" data-sprint-number="@sprint.SprintId" onchange="updateDeleteButtonState()" />
+                                    </td>
+                                    <td>@sprint.SprintName</td>
+                                    <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                                    <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -366,10 +287,128 @@
         </form>
     </div>
 
+    <div class="popup" id="popupAddRessource">
+        <h2>Manage ressources</h2>
+
+        <!-- Div pour ajouter une ressource -->
+        <div class="add-resource-section">
+            <h3 style="text-align:left;color:white">Add a ressource</h3>
+            <form asp-action="Add" asp-controller="Ressource" method="post">
+                <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                @if (@ViewBag.currentSprint != null)
+                {
+                    <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" required>
+
+                }
+
+                <div style="display:flex; gap: 20px">
+                    <!-- Champ de saisie pour le nom de la personne -->
+                    <div class="form-group" style="width: 100%;">
+                        <label for="resourceName">Name</label>
+                        <input type="text" id="Name" name="Name" required>
+                    </div>
+
+                    <!-- Champ de saisie pour l'adresse e-mail -->
+                    <div class="form-group" style="width: 100%;">
+                        <label for="resourceEmail">Email</label>
+                        <input type="email" id="resourceEmail" name="resourceEmail" required>
+                    </div>
+                </div>
+                <!-- Champ de saisie pour l'adresse e-mail -->
+                <div class="form-group">
+                    <label for="capacity">Ressource Capacity</label>
+                    <input type="number" id="capacity" name="capacity" required>
+                </div>
+
+                <!-- Bouton pour ajouter la ressource -->
+                <button type="submit">Add Resource</button>
+            </form>
+        </div>
+
+        <!-- Div pour la liste des ressources -->
+        <div class="resource-list-section">
+            <h3 style="color:white;text-align:left">Ressources in your sprint</h3>
+            <ul>
+                <li>
+                    @if (@ViewBag.currentSprint != null)
+                    {
+                        <div style="color: white; display: flex;flex-direction: column;gap: 2vh;">
+                            @foreach (var ressource in @ViewBag.currentSprint.Ressources)
+                            {
+                                <div style="width: 100%;text-align: left;margin-right: 5vh;">
+                                    <form asp-controller="Ressource" asp-action="Remove" method="post" onsubmit="return confirm('Are you sure you want to remove this resource?');">
+                                        <input type="hidden" id="Id" name="Id" value="@ressource.Id">
+                                        <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                        <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                                        <span>@ressource.Name</span>
+                                        <button style="background-color:red" onclick="deleteResource('@ressource.Id')">
+                                            Remove ressource
+                                        </button>
+
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No existing sprint</p>
+                    }
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Div pour la pop-up -->
+    <div class="popup" id="popupWorkItem">
+        <h2>Add Item Type</h2>
+        <form asp-action="Add" asp-controller="WorkItem" method="post">
+            <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+            @if (@ViewBag.currentSprint != null)
+            {
+                <input type="hidden" id="SprintId" name="SprintId" value="@ViewBag.currentSprint.SprintId">
+            }
+            <div class="form-group">
+                <label for="TaskName">Task Name</label>
+                <input type="text" id="TaskName" name="TaskName" required>
+            </div>
+
+            <div class="form-groupbis">
+                <div>
+                    <label for="TaskType" style="margin-left: 15px;">New Task Type</label>
+                    <input type="text" id="TaskType" name="TaskType" required>
+                </div>
+            </div>
+
+            <button type="submit" onclick="closePopup()">Enregistrer</button>
+        </form>
+    </div>
+
     <!-- Div pour l'arrière-plan obscurci de la pop-up -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ajoutez un gestionnaire d'événements à chaque champ d'entrée
+            var timeForms = document.querySelectorAll('.time-form');
+            timeForms.forEach(function (form) {
+                form.addEventListener('change', function () {
+                    // Soumettez le formulaire lorsque le champ d'entrée change
+                    form.submit();
+                });
+            });
+        });
+        function selectSprint(sprintId) {
+            // Mettre à jour la valeur du champ de formulaire caché
+            document.getElementById('selectedSprintId').value = sprintId;
+
+            // Soumettre le formulaire
+            document.getElementById('sprintForm').submit();
+            //window.location.href = '/Project/ProjectDetail?projectId=' + @ViewBag.ProjectId +'&selectedSprintId=' + sprintId;
+        }
+
         // Fonction pour retourner l'ID du project selectionné
         function updateProjectIdSelected(select) {
             var selectedValue = select.value;
@@ -377,6 +416,23 @@
             document.getElementById('selectedProjectId').value = selectedValue;
             document.getElementById('projectForm').submit();
             window.location.href = '/Project/ProjectDetail?projectId=' + selectedValue;
+        }
+
+        // Fonction pour ouvrir la pop-up
+        function openPopupTask(content) {
+            switch (content.value) {
+                case 'Ressource':
+                    document.getElementById('popupAddRessource').style.display = 'block';
+                    break;
+                case 'ItemType':
+                    document.getElementById('popupWorkItem').style.display = 'block';
+                    break;
+                case 'Task':
+                    document.getElementById('popupTask').style.display = 'block';
+                    break;
+                default:
+                    console.log(`Content not found`);
+            }
         }
 
         // Fonction pour ouvrir la pop-up
@@ -402,6 +458,8 @@
             document.getElementById('popup').style.display = 'none';
             document.getElementById('popupDelete').style.display = 'none';
             document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupWorkItem').style.display = 'none';
+            document.getElementById('popupAddRessource').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
 
@@ -421,6 +479,31 @@
             var selectedTab = document.querySelector('.tab.' + tab.toLowerCase());
             selectedTab.classList.add('selected-tab');
 
+            // Masquer tous les tableaux
+            var tables = document.querySelectorAll('.table-container');
+            tables.forEach(function (table) {
+                table.style.display = 'none';
+            });
+
+            // Afficher le tableau correspondant à l'onglet
+            var selectedTable = document.querySelector('.' + tab.toLowerCase() + '-table');
+            selectedTable.style.display = 'block';
+
+            if (tab == "Backlog") { tab = "Backlog" }
+            var containers = document.querySelectorAll('.container2');
+            containers.forEach(function (container) {
+                container.style.display = 'none';
+            });
+
+            // Afficher le tableau correspondant à l'onglet
+            var selectedTable = document.querySelector('.' + tab.toLowerCase() + '-table');
+            selectedTable.style.display = 'block';
+
+            if (tab == "Backlog") { tab = "Tasks" }
+            // Afficher le container correspondant à l'onglet
+            var selectedContainerId = tab.toLowerCase() + 'Button';
+            var selectedContainer = document.getElementById(selectedContainerId);
+            selectedContainer.style.display = 'flex';
         }
 
         // Fonction pour activer/désactiver le bouton en fonction de la sélection des checkboxes

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANAProjectDesigner.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20231125130131_Update sprint field")]
-    partial class Updatesprintfield
+    [Migration("20231126202754_Link to sprint")]
+    partial class Linktosprint
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,29 @@ namespace ANAProjectDesigner.Migrations
                     b.ToTable("Project");
                 });
 
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Ressource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SprintId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SprintId");
+
+                    b.ToTable("Ressource");
+                });
+
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprint", b =>
                 {
                     b.Property<Guid>("SprintId")
@@ -114,6 +137,56 @@ namespace ANAProjectDesigner.Migrations
                     b.ToTable("Sprint");
                 });
 
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.WorkItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SprintId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TaskName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SprintId");
+
+                    b.ToTable("WorkItem");
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.WorkItemRessource", b =>
+                {
+                    b.Property<Guid>("WorkItemId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("RessourceId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("OriginalEstimate")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SprintId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("WorkItemId", "RessourceId");
+
+                    b.HasIndex("RessourceId");
+
+                    b.HasIndex("SprintId");
+
+                    b.ToTable("WorkItemRessource");
+                });
+
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
                 {
                     b.HasOne("ANA_ProjectDesigner.Models.Domain.Profil", "Profil")
@@ -123,6 +196,15 @@ namespace ANAProjectDesigner.Migrations
                         .IsRequired();
 
                     b.Navigation("Profil");
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Ressource", b =>
+                {
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Sprint", null)
+                        .WithMany("Ressources")
+                        .HasForeignKey("SprintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprint", b =>
@@ -136,6 +218,42 @@ namespace ANAProjectDesigner.Migrations
                     b.Navigation("Projects");
                 });
 
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.WorkItem", b =>
+                {
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Sprint", null)
+                        .WithMany("WorkItems")
+                        .HasForeignKey("SprintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.WorkItemRessource", b =>
+                {
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Ressource", "Ressource")
+                        .WithMany("WorkItemRessources")
+                        .HasForeignKey("RessourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.Sprint", "Sprint")
+                        .WithMany()
+                        .HasForeignKey("SprintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ANA_ProjectDesigner.Models.Domain.WorkItem", "WorkItem")
+                        .WithMany("WorkItemRessources")
+                        .HasForeignKey("WorkItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ressource");
+
+                    b.Navigation("Sprint");
+
+                    b.Navigation("WorkItem");
+                });
+
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Profil", b =>
                 {
                     b.Navigation("projectList");
@@ -144,6 +262,23 @@ namespace ANAProjectDesigner.Migrations
             modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Project", b =>
                 {
                     b.Navigation("Sprints");
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Ressource", b =>
+                {
+                    b.Navigation("WorkItemRessources");
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.Sprint", b =>
+                {
+                    b.Navigation("Ressources");
+
+                    b.Navigation("WorkItems");
+                });
+
+            modelBuilder.Entity("ANA_ProjectDesigner.Models.Domain.WorkItem", b =>
+                {
+                    b.Navigation("WorkItemRessources");
                 });
 #pragma warning restore 612, 618
         }

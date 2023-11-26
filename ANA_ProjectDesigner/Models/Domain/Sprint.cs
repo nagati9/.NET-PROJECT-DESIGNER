@@ -18,5 +18,9 @@ namespace ANA_ProjectDesigner.Models.Domain
 
         public virtual Project Projects { get; set; }
 
+        public virtual List<Ressource> Ressources { get; set; }
+
+        public virtual List<WorkItem> WorkItems { get; set; }
+
     }
 }

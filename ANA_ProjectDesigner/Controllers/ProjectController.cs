@@ -33,7 +33,7 @@ namespace ANA_ProjectDesigner.Controllers
 
         //[HttpGet("{id}")] // Permet de récupérer l'ID depuis la route à tester
         [HttpGet]
-        public IActionResult ProjectDetail(Guid projectID, Guid sprintID /*, [FromRoute] Guid id*/)
+        public IActionResult ProjectDetail(Guid projectID, Guid selectedSprintId /*, [FromRoute] Guid id*/)
         {
 
             ViewBag.projectId = projectID;
@@ -51,7 +51,7 @@ namespace ANA_ProjectDesigner.Controllers
             .Include(p => p.Sprints)
             .FirstOrDefault(p => p.Id == projectID);
 
-            if (projectWithSprints != null)
+            if (projectWithSprints != null && projectWithSprints.Sprints.Count() > 0)
             {
                 var sprintsForProject = projectWithSprints.Sprints
                     .OrderBy(s => s.DateStart)
@@ -59,7 +59,82 @@ namespace ANA_ProjectDesigner.Controllers
                     .ToList();
 
                 ViewBag.listSprints = sprintsForProject;
+
+
+                DateTime today = DateTime.Now.Date;
+                var currentSprint = new Sprint();
+
+                if (selectedSprintId != Guid.Empty)
+                {
+                    currentSprint = projectDBContext.Sprint
+                         .Include(s => s.Ressources)
+                    .Where(s => s.SprintId == selectedSprintId )
+                    .FirstOrDefault();
+                } else
+                {
+                    currentSprint = projectDBContext.Sprint.Include(s => s.Ressources)
+                    .Where(s => s.DateStart <= today && s.DateEnd >= today && s.ProjectId == projectID)
+                    .OrderBy(s => s.DateStart)
+                    .FirstOrDefault();
+                }
+
+                if (currentSprint == null)
+                {
+                    currentSprint = projectDBContext.Sprint.Include(s => s.Ressources)
+                        .Where(s => s.DateStart > today && s.ProjectId == projectID)
+                        .OrderBy(s => s.DateStart)
+                        .FirstOrDefault();
+
+                    if (currentSprint == null)
+                    {
+                        // Si aucun sprint n'est en cours et il n'y a pas de futur sprint,
+                        // alors récupérer le dernier sprint (le sprint avec la date de début la plus éloignée)
+                        currentSprint = projectDBContext.Sprint
+                            .Include(s => s.Ressources)
+                            .Where(s => s.ProjectId == projectID)
+                            .OrderByDescending(s => s.DateStart)
+                            .FirstOrDefault();
+                    }
+                    
+                }
+                
+                if (currentSprint != null)
+                {
+                    ViewBag.currentSprint = currentSprint;
+
+                    // Supposons que sprintId soit la variable dans votre code
+
+                    // Récupérer les ParentItem avec le sprintId correspondant
+                    var workItem = projectDBContext.WorkItem
+                        .Where(p => p.SprintId == currentSprint.SprintId)
+                        .ToList();
+
+                    if (workItem != null) { ViewBag.workItem = workItem; }
+
+                    var ressources = projectDBContext.Ressource
+                        .Where(p => p.SprintId == currentSprint.SprintId)
+                        .ToList();
+
+                    if (ressources.Count() > 0) { ViewBag.ressources = ressources;}
+
+                   var WorkItemRessource = projectDBContext.WorkItemRessource
+                        .Where(p =>p.SprintId == currentSprint.SprintId)
+                        .ToList();
+                    if (WorkItemRessource.Count() > 0) { ViewBag.WorkItemRessource = WorkItemRessource; }
+
+                    /*if (WorkItemRessource != null)
+                    {
+                        var totalOriginalEstimated =  projectDBContext.WorkItemRessource
+                            .Where(wir => wir.SprintId == currentSprint.SprintId)
+                            .Sum(wir => wir.OriginalEstimate);
+                        
+                    }*/
+
+                }
+
             }
+
+            
 
             return View(projectWithSprints);
         }

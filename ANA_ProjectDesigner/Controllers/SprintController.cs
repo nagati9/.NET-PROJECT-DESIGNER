@@ -4,6 +4,7 @@ using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.CodeAnalysis;
 
 namespace ANA_ProjectDesigner.Controllers
 {
@@ -41,7 +42,7 @@ namespace ANA_ProjectDesigner.Controllers
 
             if (sprintExists)
             {
-                return RedirectToAction("ProjectDetail", "Project");
+                return RedirectToAction("ProjectDetail", "Project", new { projectId = addSprintRequest.ProjectId });
             }
 
 
