@@ -17,54 +17,57 @@ namespace ANA_ProjectDesigner.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTaskTime(Dictionary<Guid, Dictionary<Guid, int>> timeValues, Guid taskId, Guid sprintId, Guid projectId)
+        public async Task<IActionResult> UpdateTaskTime(Dictionary<Guid, Dictionary<Guid, int>> timeValues, Guid sprintId, Guid projectId)
         {
-            foreach (var resourceId in timeValues[taskId].Keys)
+            foreach (var taskId in timeValues.Keys)
             {
-                var value = timeValues[taskId][resourceId];
-
-                // Vérifiez si une entrée avec ces clés existe déjà
-                var existingEntry = await workItemDBContext.WorkItemRessource
-                    .FirstOrDefaultAsync(wir => wir.WorkItemId == taskId && wir.RessourceId == resourceId);
-
-                // Vérifiez la capacité avant d'ajouter une nouvelle entrée
-                var resourceCapacity = await workItemDBContext.Ressource
-                    .Where(r => r.Id == resourceId)
-                    .Select(r => r.Capacity)
-                    .FirstOrDefaultAsync();
-
-                var totalCapacityUsed = await workItemDBContext.WorkItemRessource
-                    .Where(wir => wir.RessourceId == resourceId && wir.SprintId == sprintId)
-                    .SumAsync(wir => wir.OriginalEstimate);
-
-                // Vérifiez si l'ajout ou la mise à jour dépasse la capacité totale restante
-                if (totalCapacityUsed + value - (existingEntry?.OriginalEstimate ?? 0) > resourceCapacity)
+                foreach (var resourceId in timeValues[taskId].Keys)
                 {
-                    // Capacité dépassée, ne procédez pas à l'ajout ou à la mise à jour
-                    continue;
-                }
+                    var value = timeValues[taskId][resourceId];
 
-                if (existingEntry != null)
-                {
-                    // Si elle existe, mettez à jour la valeur
-                    existingEntry.OriginalEstimate = value;
-                    workItemDBContext.Update(existingEntry);
-                }
-                else
-                {
-                    // Ajoutez une nouvelle entrée
-                    var workItemRessource = new WorkItemRessource()
+                    // Vérifiez si une entrée avec ces clés existe déjà
+                    var existingEntry = await workItemDBContext.WorkItemRessource
+                        .FirstOrDefaultAsync(wir => wir.WorkItemId == taskId && wir.RessourceId == resourceId && wir.SprintId == sprintId);
+
+                    // Vérifiez la capacité avant d'ajouter une nouvelle entrée
+                    var resourceCapacity = await workItemDBContext.Ressource
+                        .Where(r => r.Id == resourceId)
+                        .Select(r => r.Capacity)
+                        .FirstOrDefaultAsync();
+
+                    var totalCapacityUsed = await workItemDBContext.WorkItemRessource
+                        .Where(wir => wir.RessourceId == resourceId && wir.SprintId == sprintId)
+                        .SumAsync(wir => wir.OriginalEstimate);
+
+                    // Vérifiez si l'ajout ou la mise à jour dépasse la capacité totale restante
+                    if (totalCapacityUsed + value - (existingEntry?.OriginalEstimate ?? 0) > resourceCapacity)
                     {
-                        SprintId = sprintId,
-                        WorkItemId = taskId,
-                        RessourceId = resourceId,
-                        OriginalEstimate = value,
-                    };
-                    await workItemDBContext.WorkItemRessource.AddAsync(workItemRessource);
-                }
+                        // Capacité dépassée, ne procédez pas à l'ajout ou à la mise à jour
+                        continue;
+                    }
 
-                await workItemDBContext.SaveChangesAsync();
+                    if (existingEntry != null)
+                    {
+                        // Si elle existe, mettez à jour la valeur
+                        existingEntry.OriginalEstimate = value;
+                        workItemDBContext.Update(existingEntry);
+                    }
+                    else
+                    {
+                        // Ajoutez une nouvelle entrée
+                        var workItemRessource = new WorkItemRessource()
+                        {
+                            SprintId = sprintId,
+                            WorkItemId = taskId,
+                            RessourceId = resourceId,
+                            OriginalEstimate = value,
+                        };
+                        await workItemDBContext.WorkItemRessource.AddAsync(workItemRessource);
+                    }
+                }
             }
+
+            await workItemDBContext.SaveChangesAsync();
 
             return RedirectToAction("ProjectDetail", "Project", new { projectId, selectedSprintId = sprintId });
         }
