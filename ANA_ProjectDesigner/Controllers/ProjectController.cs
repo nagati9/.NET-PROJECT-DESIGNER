@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ANA_ProjectDesigner.Services.Interfaces;
 using Microsoft.CodeAnalysis;
+using Microsoft.Build.Evaluation;
 
 namespace ANA_ProjectDesigner.Controllers
 {
@@ -21,7 +22,11 @@ namespace ANA_ProjectDesigner.Controllers
             _projectsService = projectsService;
         }
 
-
+        public class SprintWithWorkItems
+        {
+            public Sprint Sprint { get; set; }
+            public List<WorkItem> WorkItems { get; set; }
+        }
 
 
         [HttpGet]
@@ -51,6 +56,8 @@ namespace ANA_ProjectDesigner.Controllers
             .Include(p => p.Sprints)
             .FirstOrDefault(p => p.Id == projectID);
 
+            
+
             if (projectWithSprints != null && projectWithSprints.Sprints.Count() > 0)
             {
                 var sprintsForProject = projectWithSprints.Sprints
@@ -59,6 +66,19 @@ namespace ANA_ProjectDesigner.Controllers
                     .ToList();
 
                 ViewBag.listSprints = sprintsForProject;
+
+                var backlogItems = projectDBContext.Sprint
+                .Where(s => s.ProjectId == projectID)
+                .Include(s => s.WorkItems)
+                .ToList()
+                .Select(sprint => new SprintWithWorkItems
+                {
+                    Sprint = sprint,
+                    WorkItems = sprint.WorkItems.ToList()
+                })
+                .ToList();
+
+                ViewBag.backlogItems = backlogItems;
 
 
                 DateTime today = DateTime.Now.Date;

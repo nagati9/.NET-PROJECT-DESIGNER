@@ -190,23 +190,28 @@
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>Task Container</th>
+                            <th>Task Name</th>
+                            <th>Sprint</th>
+                            <th>Comments</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (@ViewBag.listSprints != null)
+                        @if (@ViewBag.backlogItems != null)
                         {
                             <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
-                            @foreach (var sprint in @ViewBag.listSprints)
+                            @foreach (var sprintWithWorkItems in ViewBag.backlogItems)
                             {
-                                <tr class="@(sprint.SprintId == @ViewBag.currentSprint.SprintId ? "current-sprint-row" : "selectable-row")" onclick="selectSprint('@sprint.SprintId')">
-                                    <td style="display:none">@sprint.SprintId</td>
-                                    <td>@sprint.SprintName</td>
-                                    <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
-                                    <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
-                                </tr>
+                                var sprint = sprintWithWorkItems.Sprint;
+                                foreach (var workItem in sprintWithWorkItems.WorkItems)
+                                {
+                                    <tr>
+                                        <td>@workItem.TaskType</td>
+                                        <td>@workItem.TaskName</td>
+                                        <td>@sprint.SprintName</td>
+                                        <td>@sprint.Comments</td>
+                                    </tr>
+                                }
                             }
                         }
                     </tbody>
