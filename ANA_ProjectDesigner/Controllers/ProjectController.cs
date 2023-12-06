@@ -16,7 +16,7 @@ namespace ANA_ProjectDesigner.Controllers
 
         public ProjectController(MyDBContext projectDBContext, IProjectsService projectsService)
         {
-       
+
             this.projectDBContext = projectDBContext;
             _projectsService = projectsService;
         }
@@ -27,29 +27,28 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpGet]
         public IActionResult ProjectTab(Guid profilUserId)
         {
-           return View();
-           // return RedirectToAction("Welcome");
+            return View();
+            // return RedirectToAction("Welcome");
         }
+
+        
 
         //[HttpGet("{id}")] // Permet de récupérer l'ID depuis la route à tester
         [HttpGet]
+
         public IActionResult ProjectDetail(Guid projectID, Guid selectedSprintId /*, [FromRoute] Guid id*/)
         {
-
             ViewBag.projectId = projectID;
 
-
-            // GET Projects
             string profilId = HttpContext.Session.GetString("idUser");
             var listProject = projectDBContext.Project
-                    .Where(p => p.Id != projectID && p.ProfileId == new Guid(profilId))
-                    .ToList();
+                .Where(p => p.Id != projectID && p.ProfileId == new Guid(profilId))
+                .ToList();
             ViewBag.listProject = listProject;
 
-            //GET Sprints
             var projectWithSprints = projectDBContext.Project
-            .Include(p => p.Sprints)
-            .FirstOrDefault(p => p.Id == projectID);
+                .Include(p => p.Sprints)
+                .FirstOrDefault(p => p.Id == projectID);
 
             if (projectWithSprints != null && projectWithSprints.Sprints.Count() > 0)
             {
@@ -60,88 +59,94 @@ namespace ANA_ProjectDesigner.Controllers
 
                 ViewBag.listSprints = sprintsForProject;
 
-
                 DateTime today = DateTime.Now.Date;
                 var currentSprint = new Sprint();
 
                 if (selectedSprintId != Guid.Empty)
                 {
                     currentSprint = projectDBContext.Sprint
-                         .Include(s => s.Ressources)
-                    .Where(s => s.SprintId == selectedSprintId )
-                    .FirstOrDefault();
-                } else
-                {
-                    currentSprint = projectDBContext.Sprint.Include(s => s.Ressources)
-                    .Where(s => s.DateStart <= today && s.DateEnd >= today && s.ProjectId == projectID)
-                    .OrderBy(s => s.DateStart)
-                    .FirstOrDefault();
-                }
-
-                if (currentSprint == null)
-                {
-                    currentSprint = projectDBContext.Sprint.Include(s => s.Ressources)
-                        .Where(s => s.DateStart > today && s.ProjectId == projectID)
-                        .OrderBy(s => s.DateStart)
+                        .Include(s => s.Ressources)
+                        .Where(s => s.SprintId == selectedSprintId)
                         .FirstOrDefault();
+                }
+                else
+                {
+                    currentSprint = projectDBContext.Sprint
+                        .Include(s => s.Ressources)
+                        .FirstOrDefault(s => s.DateStart <= today && s.DateEnd >= today && s.ProjectId == projectID);
 
                     if (currentSprint == null)
                     {
-                        // Si aucun sprint n'est en cours et il n'y a pas de futur sprint,
-                        // alors récupérer le dernier sprint (le sprint avec la date de début la plus éloignée)
                         currentSprint = projectDBContext.Sprint
                             .Include(s => s.Ressources)
-                            .Where(s => s.ProjectId == projectID)
-                            .OrderByDescending(s => s.DateStart)
-                            .FirstOrDefault();
+                            .FirstOrDefault(s => s.DateStart > today && s.ProjectId == projectID);
+
+                        if (currentSprint == null)
+                        {
+                            currentSprint = projectDBContext.Sprint
+                                .Include(s => s.Ressources)
+                                .Where(s => s.ProjectId == projectID)
+                                .OrderByDescending(s => s.DateStart)
+                                .FirstOrDefault();
+                        }
                     }
-                    
                 }
-                
+
                 if (currentSprint != null)
                 {
                     ViewBag.currentSprint = currentSprint;
 
-                    // Supposons que sprintId soit la variable dans votre code
+                    var allSprints = selectedSprintId == Guid.Empty;
 
-                    // Récupérer les ParentItem avec le sprintId correspondant
-                    var workItem = projectDBContext.WorkItem
-                        .Where(p => p.SprintId == currentSprint.SprintId)
-                        .ToList();
+                    if (allSprints)
+                    {
+                        var allWorkItems = projectDBContext.WorkItem.ToList();
+                        ViewBag.workItem = allWorkItems;
+                    }
+                    else
+                    {
+                        var workItemsForSprint = projectDBContext.WorkItem
+                            .Where(p => p.SprintId == currentSprint.SprintId)
+                            .ToList();
 
-                    if (workItem != null) { ViewBag.workItem = workItem; }
+                        ViewBag.workItem = workItemsForSprint;
+                    }
 
                     var ressources = projectDBContext.Ressource
                         .Where(p => p.SprintId == currentSprint.SprintId)
                         .ToList();
 
-                    if (ressources.Count() > 0) { ViewBag.ressources = ressources;}
+                    if (ressources.Count() > 0) { ViewBag.ressources = ressources; }
 
-                   var WorkItemRessource = projectDBContext.WorkItemRessource
-                        .Where(p =>p.SprintId == currentSprint.SprintId)
+                    var WorkItemRessource = projectDBContext.WorkItemRessource
+                        .Where(p => p.SprintId == currentSprint.SprintId)
                         .ToList();
+
                     if (WorkItemRessource.Count() > 0) { ViewBag.WorkItemRessource = WorkItemRessource; }
 
-                    /*if (WorkItemRessource != null)
+                    if (WorkItemRessource != null)
                     {
-                        var totalOriginalEstimated =  projectDBContext.WorkItemRessource
-                            .Where(wir => wir.SprintId == currentSprint.SprintId)
-                            .Sum(wir => wir.OriginalEstimate);
-                        
-                    }*/
+                        var sommeParWorkItemId = projectDBContext.WorkItemRessource
+                            .GroupBy(wir => wir.WorkItemId)
+                            .ToDictionary(
+                                group => group.Key,
+                                group => group.Sum(item => item.OriginalEstimate)
+                            );
 
+                        ViewBag.sumTime = sommeParWorkItemId;
+                    }
                 }
-
             }
-
-            
 
             return View(projectWithSprints);
         }
+
+
+
         [HttpGet]
         public async Task<IActionResult> ListProjects()
         {
-          
+
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
@@ -170,7 +175,7 @@ namespace ANA_ProjectDesigner.Controllers
                 await projectDBContext.SaveChangesAsync();
             }
 
-            return RedirectToAction("Welcome","Profil");
+            return RedirectToAction("Welcome", "Profil");
         }
 
         [HttpPost]
@@ -185,9 +190,22 @@ namespace ANA_ProjectDesigner.Controllers
 
             return RedirectToAction("SprintTab", "Sprint");
         }
+
+
+ 
+        [HttpGet]
+        public IActionResult Backlog(Guid projectId)
+        {
+            // Fetch the project including sprints
+            var project = projectDBContext.Project
+                .Include(p => p.Sprints)
+                .FirstOrDefault(p => p.Id == projectId);
+
+            return View(project);
+        }
+
     }
 
 
-
-}
+    }
 

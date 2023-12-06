@@ -146,6 +146,100 @@ namespace ANA_ProjectDesigner.Controllers
             }
             return RedirectToAction("ListUserProfils");
         }
+        [HttpGet]
+        public async Task<IActionResult> Overview()
+        {
+            string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
+            {
+                var projects = await profilDBContext.Project
+                .Where(p => p.ProfileId == profilUserId)
+                .ToListAsync();
+
+                return View("Overview", projects);
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult CreateProject()
+        {
+            return View(); // This view should contain the form for creating a new project in a popup
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProject(Guid id)
+        {
+            var project = await profilDBContext.Project.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project); // This view should contain the form for editing a project in a popup
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProject(Guid id)
+        {
+            var project = await profilDBContext.Project.FindAsync(id);
+
+            if (project != null)
+            {
+                profilDBContext.Project.Remove(project);
+                await profilDBContext.SaveChangesAsync();
+                return RedirectToAction("Overview"); // Redirige vers la liste des projets après la suppression
+            }
+
+            return RedirectToAction("Overview"); // Redirection si le projet n'est pas trouvé
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProject(string name,string description)
+        {
+            string storedGuid = HttpContext.Session.GetString("idUser");
+            if (Guid.TryParse(storedGuid, out Guid profilUserId))
+            {
+                var project = new Models.Domain.Project()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Description = description,
+                    ProfileId = profilUserId
+                };
+
+                await profilDBContext.Project.AddAsync(project);
+                await profilDBContext.SaveChangesAsync();
+            
+            return RedirectToAction("Overview"); // Redirect to the project list after creation
+            }
+
+            return RedirectToAction("Overview"); // Return to the create view if model state is invalid
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProject(Guid id, string editName, string editDescription)
+        {
+            var project = await profilDBContext.Project.FindAsync(id);
+
+            if (project != null)
+            {
+                project.Name = editName;
+                project.Description = editDescription;
+
+                profilDBContext.Entry(project).State = EntityState.Modified;
+                await profilDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Overview"); // Rediriger vers la liste des projets après la modification
+            }
+
+            return RedirectToAction("Overview"); // Rediriger vers la liste des projets si le projet n'est pas trouvé
+        }
+
+
 
     }
 }

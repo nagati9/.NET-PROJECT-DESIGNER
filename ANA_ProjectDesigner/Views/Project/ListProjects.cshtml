@@ -62,7 +62,7 @@
         <h1>My Projects</h1>
 
         <div class="inner-container">
-            <div class="project-list-item">OverView</div>
+            <div class="project-list-item" onclick="redirectToController(null,'@Url.Action("Overview", "Profil")')" >OverView</div>
             @foreach (var project in Model)
             {
                 <div class="project-list-item" onclick="redirectToController('@project.Id', '@Url.Action("ProjectDetail", "Project")')">@project.Name</div>
@@ -73,7 +73,12 @@
 
     <script>
         function redirectToController(projectID, url) {
-            window.location.href = url + '?projectId=' + projectID;
+            if (projectID) {
+                window.location.href = url + '?projectId=' + projectID;
+            }
+            else { 
+                window.location.href = url;
+            }
         }
     </script>
 </body>

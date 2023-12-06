@@ -18,7 +18,7 @@
                 <input type="hidden" id="selectedProjectId" name="Id" value="@ViewBag.projectId" />
                 <!-- Premier container -->
                 <select name="selectedProject" onchange="updateProjectIdSelected(this)">
-                    <option value="@ViewBag.projectId">TO BE DONE</option>
+                    <option value="@ViewBag.projectId">@Model.Name</option>
                     @foreach (var project in @ViewBag.listProject)
                     {
                         <option value="@project.Id">@project.Name</option>
@@ -155,12 +155,22 @@
                                                     }
                                                 }
                                                 <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
+
                                             }
+                                            @foreach (var item in ViewBag.sumTime)
+                                            {
+                                            
+                                               if(item.Key==workItem.Id){
+                                                <td>@item.Value</td>
+                                               }
+                                            }
+
                                         }
                                         <!-- Ajoutez un champ caché pour l'ID de la tâche -->
                                         <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
                                         <input type="hidden" name="projectId" value="@ViewBag.projectId" />
                                         <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                          <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
                                     </tr>
                                     rowIndex++;
                                 }
@@ -186,36 +196,53 @@
 
         <!-- Tableau Task -->
         <div class="table-container backlog-table" style="display: none;">
-            <form id="sprintForm" asp-controller="Project" asp-action="ProjectDetail" method="get">
-                <table id="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (@ViewBag.listSprints != null)
-                        {
-                            <!-- Les lignes du tableau seront ajoutées dynamiquement via JavaScript ou Razor en fonction de l'onglet sélectionné -->
-                            @foreach (var sprint in @ViewBag.listSprints)
-                            {
-                                <tr class="@(sprint.SprintId == @ViewBag.currentSprint.SprintId ? "current-sprint-row" : "selectable-row")" onclick="selectSprint('@sprint.SprintId')">
-                                    <td style="display:none">@sprint.SprintId</td>
-                                    <td>@sprint.SprintName</td>
-                                    <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
-                                    <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+            <form id="sprintForm" asp-controller="Project" asp-action="ListProjects" method="get">
+
+
+
+                <table class="sprint-table" id="table">
+                            <thead>
+                                <tr>
+                                    <th>Task Name</th>
+                                    <th>Task Type</th>
+                                    <th>Sprint Name</th>
+                                    <!-- Add other relevant columns -->
                                 </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Sprints != null)
+                                {
+                                    @foreach (var sprint in Model.Sprints)
+                                    {
+                                      
+                               
+                                @if (sprint.WorkItems != null)
+                                        {
+                                            @foreach (var workItem in sprint.WorkItems)
+                                            {
+                                        <script>console.log(@workItem.TaskName+ " " + @sprint.SprintName)</script>
+
+                                                <tr>
+                                                    <td>@workItem.TaskName</td>
+                                                    <td>@workItem.TaskType</td>
+                                                    <td>@sprint.SprintName</td>
+                                                    
+                                                    <!-- Add other relevant columns -->
+                                                </tr>
+                                            }
+                                        }
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
                 <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
                 <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
             </form>
         </div>
-    </div>
+
+
+
 
     <!-- Div pour la pop-up -->
     <div class="popup" id="popup">

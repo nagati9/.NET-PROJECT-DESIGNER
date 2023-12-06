@@ -1,0 +1,183 @@
+﻿@model List<ANA_ProjectDesigner.Models.Domain.Project>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Votre Page</title>
+    <link rel="stylesheet" type="text/css" href="~/css/projectDetail.css">
+</head>
+<body>
+
+    <p>
+        <button onclick="openPopup('Add')">Create New Project</button>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td>
+                        <button onclick="openEditPopup('@project.Id', '@project.Name', '@project.Description')">Edit</button> |
+                        |
+                        <form action="@Url.Action("DeleteProject", "Profil")" method="post">
+                            <input type="hidden" name="id" value="@project.Id" />
+                            <button type="submit">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Div pour la pop-up -->
+    <div class="popup" id="popup">
+        <h2>New Project</h2>
+        <form action="CreateProject" method="post">
+            <div class="button">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter project name">
+            </div>
+
+            <div>
+                <label for="description">Description:</label>
+                <input type="text" class="inputSize" id="description" name="description" placeholder="Enter project description">
+            </div>
+
+            <button type="submit" name="Submit">Save</button>
+        </form>
+    </div>
+    <div class="popup" id="popupEdit">
+        <h2>Edit Project</h2>
+        <form id="editProjectForm" method="post">
+            <div class="button">
+                <label for="editName">Name:</label>
+                <input type="text" id="editName" name="editName" placeholder="Enter project name">
+            </div>
+
+            <div>
+                <label for="editDescription">Description:</label>
+                <input type="text" class="inputSize" id="editDescription" name="editDescription" placeholder="Enter project description">
+            </div>
+
+            <button type="submit" name="Submit">Save</button>
+        </form>
+    </div>
+
+   
+
+    <!-- Div pour l'arrière-plan obscurci de la pop-up -->
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <script>
+
+        // Function to open the edit popup
+        function openEditPopup(id, name, description) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popupEdit').style.display = 'block';
+
+            document.getElementById('editName').value = name;
+            document.getElementById('editDescription').value = description;
+
+            document.getElementById('editProjectForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+
+                fetch('@Url.Action("EditProject", "Profil")' + '?id=' + id, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            console.error('Project edit failed.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error editing project:', error);
+                    });
+            });
+        }
+
+        // Rest of your script remains unchanged
+
+
+        
+
+        // Fonction pour ouvrir la pop-up
+        function openPopup(content) {
+            document.getElementById('overlay').style.display = 'block';
+            switch (content) {
+                case 'Add':
+          
+                    document.getElementById('popup').style.display = 'block';
+                    break;
+                case 'Delete':
+                    document.getElementById('popupDelete').style.display = 'block';
+                    break;
+                case 'Edit':
+                    document.getElementById('popupEdit').style.display = 'block';
+                    break;
+                default:
+                    console.log(`Content not found`);
+            }
+        }
+
+        // Fonction pour fermer la pop-up
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupDelete').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupWorkItem').style.display = 'none';
+            document.getElementById('popupAddRessource').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+
+        function deleteProject(projectId) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                var formData = new FormData();
+                formData.append('id', projectId);
+
+                fetch('@Url.Action("DeleteProject", "Profil")', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Reload the page or update UI as needed
+                            window.location.reload(); // Example: reload the page
+                        } else {
+                            console.error('Project deletion failed.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting project:', error);
+                    });
+            }
+        }
+
+
+
+      
+    </script>
+
+
+</body>
+</html>
