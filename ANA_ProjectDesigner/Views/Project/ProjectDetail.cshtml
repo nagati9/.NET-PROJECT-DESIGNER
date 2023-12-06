@@ -18,7 +18,7 @@
                 <input type="hidden" id="selectedProjectId" name="Id" value="@ViewBag.projectId" />
                 <!-- Premier container -->
                 <select name="selectedProject" onchange="updateProjectIdSelected(this)">
-                    <option value="@ViewBag.projectId">TO BE DONE</option>
+                    <option value="@ViewBag.projectId">@Model.Name</option>
                     @foreach (var project in @ViewBag.listProject)
                     {
                         <option value="@project.Id">@project.Name</option>
@@ -155,12 +155,22 @@
                                                     }
                                                 }
                                                 <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
+
                                             }
+                                            @foreach (var item in ViewBag.sumTime)
+                                            {
+                                            
+                                               if(item.Key==workItem.Id){
+                                                <td>@item.Value</td>
+                                               }
+                                            }
+
                                         }
                                         <!-- Ajoutez un champ caché pour l'ID de la tâche -->
                                         <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
                                         <input type="hidden" name="projectId" value="@ViewBag.projectId" />
                                         <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                          <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
                                     </tr>
                                     rowIndex++;
                                 }
@@ -220,7 +230,9 @@
                 <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
             </form>
         </div>
-    </div>
+
+
+
 
     <!-- Div pour la pop-up -->
     <div class="popup" id="popup">

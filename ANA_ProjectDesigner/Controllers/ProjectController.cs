@@ -17,7 +17,7 @@ namespace ANA_ProjectDesigner.Controllers
 
         public ProjectController(MyDBContext projectDBContext, IProjectsService projectsService)
         {
-       
+
             this.projectDBContext = projectDBContext;
             _projectsService = projectsService;
         }
@@ -32,29 +32,28 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpGet]
         public IActionResult ProjectTab(Guid profilUserId)
         {
-           return View();
-           // return RedirectToAction("Welcome");
+            return View();
+            // return RedirectToAction("Welcome");
         }
+
+        
 
         //[HttpGet("{id}")] // Permet de récupérer l'ID depuis la route à tester
         [HttpGet]
+
         public IActionResult ProjectDetail(Guid projectID, Guid selectedSprintId /*, [FromRoute] Guid id*/)
         {
-
             ViewBag.projectId = projectID;
 
-
-            // GET Projects
             string profilId = HttpContext.Session.GetString("idUser");
             var listProject = projectDBContext.Project
-                    .Where(p => p.Id != projectID && p.ProfileId == new Guid(profilId))
-                    .ToList();
+                .Where(p => p.Id != projectID && p.ProfileId == new Guid(profilId))
+                .ToList();
             ViewBag.listProject = listProject;
 
-            //GET Sprints
             var projectWithSprints = projectDBContext.Project
-            .Include(p => p.Sprints)
-            .FirstOrDefault(p => p.Id == projectID);
+                .Include(p => p.Sprints)
+                .FirstOrDefault(p => p.Id == projectID);
 
             
 
@@ -142,26 +141,29 @@ namespace ANA_ProjectDesigner.Controllers
                         .ToList();
                     if (WorkItemRessource.Count() > 0) { ViewBag.WorkItemRessource = WorkItemRessource; }
 
-                    /*if (WorkItemRessource != null)
+                    if (WorkItemRessource != null)
                     {
-                        var totalOriginalEstimated =  projectDBContext.WorkItemRessource
-                            .Where(wir => wir.SprintId == currentSprint.SprintId)
-                            .Sum(wir => wir.OriginalEstimate);
-                        
-                    }*/
+                        var sommeParWorkItemId = projectDBContext.WorkItemRessource
+                            .GroupBy(wir => wir.WorkItemId)
+                            .ToDictionary(
+                                group => group.Key,
+                                group => group.Sum(item => item.OriginalEstimate)
+                            );
 
+                        ViewBag.sumTime = sommeParWorkItemId;
+                    }
                 }
-
             }
-
-            
 
             return View(projectWithSprints);
         }
+
+
+
         [HttpGet]
         public async Task<IActionResult> ListProjects()
         {
-          
+
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
@@ -190,7 +192,7 @@ namespace ANA_ProjectDesigner.Controllers
                 await projectDBContext.SaveChangesAsync();
             }
 
-            return RedirectToAction("Welcome","Profil");
+            return RedirectToAction("Welcome", "Profil");
         }
 
         [HttpPost]

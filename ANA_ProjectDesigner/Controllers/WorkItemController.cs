@@ -3,6 +3,7 @@ using ANA_ProjectDesigner.Models.Domain;
 using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis;
 
 namespace ANA_ProjectDesigner.Controllers
 {
@@ -73,6 +74,10 @@ namespace ANA_ProjectDesigner.Controllers
         }
 
 
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> Add(AddWorkItemViewModel addWorkItemRequest)
         {
@@ -90,7 +95,7 @@ namespace ANA_ProjectDesigner.Controllers
             await workItemDBContext.WorkItem.AddAsync(workItem);
             await workItemDBContext.SaveChangesAsync();
 
-            return RedirectToAction("ProjectDetail", "Project");
+            return RedirectToAction("ProjectDetail", "Project", new { projectId= addWorkItemRequest.projectId, selectedSprintId = addWorkItemRequest.SprintId });
         }
 
         [HttpPost]
