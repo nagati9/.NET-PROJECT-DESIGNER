@@ -36,7 +36,7 @@
             <!-- Deuxième container -->
             <button onclick="openPopup('Add')">Add Sprint</button>
             <button onclick="openPopup('Delete')">Delete sprint</button>
-            <button onclick="openPopup('Papayas')">Edit sprint</button>
+            <button onclick="openPopup('Edit')">Edit sprint</button>
         </div>
 
         <div id="tasksButton" class="container container2 " style="display:none">
@@ -46,8 +46,8 @@
                 <option value="ItemType">WorkItem</option>
             </select>
             <!-- Deuxième container -->
-            <button onclick="openPopup('Delete')">Delete</button>
-            <button onclick="openPopup('Papayas')">Edit</button>
+            <button onclick="openPopup('DeleteTask')">Delete</button>
+            <button onclick="openPopup('EditTask')">Edit</button>
         </div>
 
         <div class="container container3">
@@ -137,46 +137,46 @@
                                 var rowIndex = 1;
                                 foreach (var workItem in @ViewBag.workItem)
                                 {
-                                        <tr>
-                                            <td>@rowIndex</td>
-                                            <td>@workItem.TaskType</td>
-                                            <td>@workItem.TaskName</td>
-                                            @if (@ViewBag.ressources != null)
+                                            <tr>
+                                                <td>@rowIndex</td>
+                                                <td>@workItem.TaskType</td>
+                                                <td>@workItem.TaskName</td>
+                                                @if (@ViewBag.ressources != null)
                                         {
                                             foreach (var ressource in @ViewBag.ressources)
                                             {
                                                 // Recherche manuelle de la correspondance dans ViewBag.RessourceWorkItem
                                                 var OriginalEstimated = 0;
-                                                    @if (@ViewBag.WorkItemRessource != null)
+                                                        @if (@ViewBag.WorkItemRessource != null)
                                                 {
 
                                                     foreach (var item in ViewBag.WorkItemRessource)
                                                     {
-                                                            @if (item.WorkItemId == workItem.Id && item.RessourceId == ressource.Id)
+                                                                @if (item.WorkItemId == workItem.Id && item.RessourceId == ressource.Id)
                                                         {
                                                             OriginalEstimated = item.OriginalEstimate;
                                                             break;
                                                         }
                                                     }
                                                 }
-                                                    <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
+                                                        <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
 
                                             }
-                                                @foreach (var item in ViewBag.sumTime)
+                                                    @foreach (var item in ViewBag.sumTime)
                                             {
                                             
                                                if(item.Key==workItem.Id){
-                                                    <td>@item.Value</td>
+                                                        <td>@item.Value</td>
                                                }
                                             }
 
                                         }
-                                            <!-- Ajoutez un champ caché pour l'ID de la tâche -->
-                                            <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
-                                            <input type="hidden" name="projectId" value="@ViewBag.projectId" />
-                                            <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
-                                              <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
-                                        </tr>
+                                                <!-- Ajoutez un champ caché pour l'ID de la tâche -->
+                                                <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
+                                                <input type="hidden" name="projectId" value="@ViewBag.projectId" />
+                                                <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                                  <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
+                                            </tr>
                                     rowIndex++;
                                 }
                             }
@@ -357,6 +357,88 @@
         </form>
     </div>
 
+        <!-- Div pour la pop-up -->
+        <div class="popup" id="popupDeleteTask">
+            <h2>Delete task</h2>
+            <form asp-action="Remove" asp-controller="WorkItem" method="post" onsubmit="return confirm('Are you sure you want to remove this workitem?');">
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+                    <table class="sprint-table">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Task Type</th>
+                                <th>Task Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (@ViewBag.workItem != null)
+                            {
+                                var rowIndex = 1;
+                                @foreach (var workItem in @ViewBag.workItem)
+                                {
+                                <input type="hidden" id="Id" name="Id" value="@workItem.Id">
+                                <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                                    <tr>
+                                        <th>@rowIndex</th>
+                                        <th>@workItem.TaskType</th>
+                                        <th>@workItem.TaskName</th>
+                                        <th>
+                                        <button style="background-color:red" onclick="deleteResource('@workItem.Id')">
+                                                Delete
+                                            </button>
+                                        </th>
+                                    </tr>
+                                    rowIndex++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                <button type="button" style="margin-top:2%" onclick="closePopup()">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Div pour la pop-up -->
+        <div class="popup" id="popupEditTask">
+            <h2>Edit task</h2>
+            <form asp-action="Edit" asp-controller="WorkItem" method="post" onsubmit="return confirm('Are you sure you want to update this workitem?');">
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+                <table class="sprint-table">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Task Type</th>
+                            <th>Task Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (@ViewBag.workItem != null)
+                        {
+                            var rowIndex = 1;
+                            @foreach (var workItem in @ViewBag.workItem)
+                            {
+                                <input type="hidden" id="Id" name="Id" value="@workItem.Id">
+                                <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                                <tr>
+                                    <th>@rowIndex</th>
+                                    <th><input id="TaskType" name="TaskType" value="@workItem.TaskType"></th>
+                                    <th><input id="TaskName" name="TaskName" value="@workItem.TaskName"></th>
+                                    <th>
+                                        <button style="background-color:green" onclick="deleteResource('@workItem.Id')">
+                                            Update
+                                        </button>
+                                    </th>
+                                </tr>
+                                rowIndex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <button type="button" style="margin-top:2%" onclick="closePopup()">Cancel</button>
+            </form>
+        </div>
+
     <div class="popup" id="popupAddRessource">
         <h2>Manage ressources</h2>
 
@@ -504,6 +586,7 @@
 
         // Fonction pour ouvrir la pop-up
         function openPopupTask(content) {
+            console.log(content.value);
             switch (content.value) {
                 case 'Ressource':
                     document.getElementById('popupAddRessource').style.display = 'block';
@@ -514,6 +597,7 @@
                 case 'Task':
                     document.getElementById('popupTask').style.display = 'block';
                     break;
+                
                 default:
                     console.log(`Content not found`);
             }
@@ -529,9 +613,15 @@
                 case 'Delete':
                     document.getElementById('popupDelete').style.display = 'block';
                     break;
-                case 'Papayas':
+                case 'Edit':
                     document.getElementById('popupEdit').style.display = 'block';
                     break;
+                    case 'DeleteTask':
+                        document.getElementById('popupDeleteTask').style.display = 'block';
+                        break;
+                    case 'EditTask':
+                        document.getElementById('popupEditTask').style.display = 'block';
+                        break;
                 default:
                     console.log(`Content not found`);
             }
@@ -544,7 +634,9 @@
             document.getElementById('popup').style.display = 'none';
             document.getElementById('popupWorkItem').style.display = 'none';
             document.getElementById('popupAddRessource').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popupDeleteTask').style.display = 'none';
+                document.getElementById('popupEditTask').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
         }
 
         function saveSprint() {
@@ -583,7 +675,7 @@
             var selectedTable = document.querySelector('.' + tab.toLowerCase() + '-table');
             selectedTable.style.display = 'block';
 
-            if (tab == "Backlog") { tab = "Tasks" }
+
             // Afficher le container correspondant à l'onglet
             var selectedContainerId = tab.toLowerCase() + 'Button';
             var selectedContainer = document.getElementById(selectedContainerId);

@@ -2,6 +2,7 @@
 {
     public class AddWorkItemViewModel
     {
+        public Guid Id { get; set; }
 
         public string TaskName { get; set; }
         public string TaskType { get; set; }
