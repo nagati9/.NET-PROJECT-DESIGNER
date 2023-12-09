@@ -18,11 +18,16 @@
                 <input type="hidden" id="selectedProjectId" name="Id" value="@ViewBag.projectId" />
                 <!-- Premier container -->
                 <select name="selectedProject" onchange="updateProjectIdSelected(this)">
-                    <option value="@ViewBag.projectId">@Model.Name</option>
+               
+                    @if (Model != null)
+                    {
+                        <option value="@ViewBag.projectId">@Model.Name</option>
+                    }
                     @foreach (var project in @ViewBag.listProject)
                     {
                         <option value="@project.Id">@project.Name</option>
                     }
+                         <option value="overview">Overview</option>
                 </select>
             </form>
         </div>
@@ -31,7 +36,7 @@
             <!-- Deuxième container -->
             <button onclick="openPopup('Add')">Add Sprint</button>
             <button onclick="openPopup('Delete')">Delete sprint</button>
-            <button onclick="openPopup('Edit')">Edit sprint</button>
+            <button onclick="openPopup('Papayas')">Edit sprint</button>
         </div>
 
         <div id="tasksButton" class="container container2 " style="display:none">
@@ -42,7 +47,7 @@
             </select>
             <!-- Deuxième container -->
             <button onclick="openPopup('Delete')">Delete</button>
-            <button onclick="openPopup('Edit')">Edit</button>
+            <button onclick="openPopup('Papayas')">Edit</button>
         </div>
 
         <div class="container container3">
@@ -132,46 +137,46 @@
                                 var rowIndex = 1;
                                 foreach (var workItem in @ViewBag.workItem)
                                 {
-                                    <tr>
-                                        <td>@rowIndex</td>
-                                        <td>@workItem.TaskType</td>
-                                        <td>@workItem.TaskName</td>
-                                        @if (@ViewBag.ressources != null)
+                                        <tr>
+                                            <td>@rowIndex</td>
+                                            <td>@workItem.TaskType</td>
+                                            <td>@workItem.TaskName</td>
+                                            @if (@ViewBag.ressources != null)
                                         {
                                             foreach (var ressource in @ViewBag.ressources)
                                             {
                                                 // Recherche manuelle de la correspondance dans ViewBag.RessourceWorkItem
                                                 var OriginalEstimated = 0;
-                                                @if (@ViewBag.WorkItemRessource != null)
+                                                    @if (@ViewBag.WorkItemRessource != null)
                                                 {
 
                                                     foreach (var item in ViewBag.WorkItemRessource)
                                                     {
-                                                        @if (item.WorkItemId == workItem.Id && item.RessourceId == ressource.Id)
+                                                            @if (item.WorkItemId == workItem.Id && item.RessourceId == ressource.Id)
                                                         {
                                                             OriginalEstimated = item.OriginalEstimate;
                                                             break;
                                                         }
                                                     }
                                                 }
-                                                <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
+                                                    <td><input id="timeEnter-@workItem.Id" name="timeValues[@workItem.Id][@ressource.Id]" type="number" value="@(OriginalEstimated)" /></td>
 
                                             }
-                                            @foreach (var item in ViewBag.sumTime)
+                                                @foreach (var item in ViewBag.sumTime)
                                             {
                                             
                                                if(item.Key==workItem.Id){
-                                                <td>@item.Value</td>
+                                                    <td>@item.Value</td>
                                                }
                                             }
 
                                         }
-                                        <!-- Ajoutez un champ caché pour l'ID de la tâche -->
-                                        <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
-                                        <input type="hidden" name="projectId" value="@ViewBag.projectId" />
-                                        <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
-                                          <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
-                                    </tr>
+                                            <!-- Ajoutez un champ caché pour l'ID de la tâche -->
+                                            <!--<input type="hidden" name="taskId" value="@workItem.Id" />-->
+                                            <input type="hidden" name="projectId" value="@ViewBag.projectId" />
+                                            <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                              <input type="hidden" id="selectedSprintId" name="selectedSprintId" value="" />
+                                        </tr>
                                     rowIndex++;
                                 }
                             }
@@ -189,7 +194,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <input type="submit" value="Submit" />
+                 
                 </form>
             }
         </div>
@@ -262,9 +267,56 @@
                 <textarea id="comments" name="comments"></textarea>
             </div>
 
-            <button type="submit" onclick="saveSprint()">Enregistrer</button>
+            <button type="submit" onclick="saveSprint()">Add</button>
+                <button type="button" onclick="closePopup()">Cancel</button>
         </form>
     </div>
+
+
+    <!-- Popup pour l'édition du sprint -->
+        <div class="popup" id="popupEdit">
+            <h2>Edit Sprint</h2>
+            <form asp-action="EditSprint" asp-controller="Sprint" method="post">
+                <input type="hidden" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                <div class="form-group">
+                    <label>Sprint Name</label>
+                    <input type="text" name="SprintName" class="form-control" value="@ViewBag.currentSprint.SprintName" />
+                </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="date" name="DateStart" class="form-control" value="@((DateTime)ViewBag.currentSprint.DateStart).ToString(" yyyy-MM-dd")" />
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" name="DateEnd" class="form-control" value="@((DateTime)ViewBag.currentSprint.DateEnd).ToString(" yyyy-MM-dd")" />
+                </div>
+                <div class="form-group">
+                    <label>Comments</label>
+                    <textarea name="Comments" class="form-control">@ViewBag.currentSprint.Comments</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" onclick="closePopup()">Cancel</button>
+            </form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Div pour la pop-up -->
     <div class="popup" id="popupDelete">
@@ -300,7 +352,8 @@
                 </table>
             </div>
             <input type="hidden" id="SprintIdToDelete" name="SprintId" value="">
-            <button type="submit" id="deleteButton" onclick="saveSprint()" disabled>Supprimer</button>
+            <button type="submit" id="deleteButton" onclick="saveSprint()" disabled>Delete</button>
+                <button type="button" onclick="closePopup()">Cancel</button>
         </form>
     </div>
 
@@ -339,6 +392,7 @@
 
                 <!-- Bouton pour ajouter la ressource -->
                 <button type="submit">Add Resource</button>
+                    <button type="button" onclick="closePopup()">Cancel</button>
             </form>
         </div>
 
@@ -427,13 +481,26 @@
         }
 
         // Fonction pour retourner l'ID du project selectionné
-        function updateProjectIdSelected(select) {
-            var selectedValue = select.value;
-            console.log(selectedValue);
-            document.getElementById('selectedProjectId').value = selectedValue;
-            document.getElementById('projectForm').submit();
-            window.location.href = '/Project/ProjectDetail?projectId=' + selectedValue;
-        }
+            function updateProjectIdSelected(select) {
+                var selectedValue = select.value;
+
+                // Si l'option "Overview" est sélectionnée, rediriger vers l'URL correspondante
+                if (selectedValue === "overview") {
+                    redirectToOverview(); // Une fonction que vous définirez pour la redirection
+                } else {
+                    // Mettre à jour la valeur du champ de formulaire caché et soumettre le formulaire
+                    document.getElementById('selectedProjectId').value = selectedValue;
+                    document.getElementById('projectForm').submit();
+                    window.location.href = '/Project/ProjectDetail?projectId=' + selectedValue;
+                }
+            }
+
+            // Fonction de redirection vers l'overview
+            function redirectToOverview() {
+                // Ajoutez ici la logique de redirection vers l'overview
+                // Par exemple :
+                window.location.href = '@Url.Action("Overview", "Profil")';
+            }
 
         // Fonction pour ouvrir la pop-up
         function openPopupTask(content) {

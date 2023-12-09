@@ -85,5 +85,49 @@ namespace ANA_ProjectDesigner.Controllers
             return RedirectToAction("ProjectDetail", "Project", new { projectId = projectID });
         }
 
+
+        [HttpGet]
+        public IActionResult EditSprint(Guid sprintId)
+        {
+            var sprint = sprintDBContext.Sprint.FirstOrDefault(s => s.SprintId == sprintId);
+
+            if (sprint == null)
+            {
+                return NotFound(); // Sprint non trouvé
+            }
+
+            ViewBag.SprintToEdit = sprint; // Transmet les détails du sprint à la vue pour édition
+            return View();
+        }
+
+
+       
+
+        [HttpPost]
+        public IActionResult EditSprint(Sprint editedSprint)
+        {
+                var existingSprint = sprintDBContext.Sprint.FirstOrDefault(s => s.SprintId == editedSprint.SprintId);
+
+                if (existingSprint != null)
+                {
+                    // Mettre à jour les propriétés du sprint existant
+                    existingSprint.SprintName = editedSprint.SprintName;
+                    existingSprint.DateStart = editedSprint.DateStart;
+                    existingSprint.DateEnd = editedSprint.DateEnd;
+                    existingSprint.Comments = editedSprint.Comments;
+
+                    sprintDBContext.SaveChanges();
+
+                    // Redirection vers la vue "ProjectDetail" du contrôleur "Project"
+                    return RedirectToAction("ProjectDetail", "Project", new { projectId = existingSprint.ProjectId });
+                }
+     
+
+            // En cas d'erreurs, retourner à la vue d'édition avec les données saisies
+            return View(editedSprint);
+        }
+
+
+
     }
 }
