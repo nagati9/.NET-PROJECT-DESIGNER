@@ -82,26 +82,26 @@
     <p id="prj">
        Projects
     </p>
-    <table class="table">
+    <table class="centerTable">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th></th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var project in Model)
             {
-                <tr>
+                <tr class="bgtr">
                     <td>@project.Name</td>
                     <td>@project.Description</td>
-                    <td>
-                        <button onclick="openEditPopup('@project.Id', '@project.Name', '@project.Description')">Edit</button> |
-                        |
+                    <td style="display:flex; gap:20px">
+                        <button class="button" onclick="openEditPopup('@project.Id', '@project.Name', '@project.Description')">Edit</button>
+                        <span style="align-self:center">|</span>
                         <form action="@Url.Action("DeleteProject", "Profil")" method="post">
                             <input type="hidden" name="id" value="@project.Id" />
-                            <button type="submit">Delete</button>
+                            <button class="button" type="submit">Delete</button>
                         </form>
 
                     </td>
@@ -112,6 +112,14 @@
 
     </table>
 
+    <button style="margin-top:20px;
+    width: 50%;
+color:white;
+    background: black;
+    align-self: center;" onclick="openPopup('Add')">
+        Create New Project
+    </button>
+
 
 
 
@@ -119,23 +127,28 @@
        Ressources
     </p>
 
-
-    <form id="sprintForm" asp-controller="Ressource" asp-action="ListResources" method="get">
     @if (ViewBag.Ressources != null && ViewBag.Ressources.Count > 0)
     {
-        <table>
+            <table class="centerTable">
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Capacité</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var ressource in ViewBag.Ressources)
                 {
-                    <tr>
+                    <tr class="bgtr">
                         <td>@ressource.Name</td>
                         <td>@ressource.Capacity</td>
+                            <td>
+                            <form action="@Url.Action("Remove", "Ressource")" method="post">
+                                <input type="hidden" name="id" value="@ressource.Id" />
+                                <button class="button" type="submit">Delete</button>
+                            </form>
+                            </td>
                     </tr>
                 }
             </tbody>
@@ -143,18 +156,13 @@
     }
     else
     {
-        <p>Aucune ressource trouvée.</p>
+        <p style="align-self:center">Aucune ressource trouvée.</p>
     }
-    </form>
-
-
-
-    <button onclick="openPopup('Add')">Add Ressource</button>
 
     <!-- Rest of your HTML and scripts for popups and functionality -->
 
 
-    <button onclick="openPopup('Add')">Create New Project</button>
+    
     <!-- Div pour la pop-up -->
     <div class="popup" id="popup">
         <h2>New Project</h2>

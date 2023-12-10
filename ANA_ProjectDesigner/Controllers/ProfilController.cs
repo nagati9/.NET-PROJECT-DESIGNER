@@ -152,9 +152,19 @@ namespace ANA_ProjectDesigner.Controllers
             string storedGuid = HttpContext.Session.GetString("idUser");
             if (Guid.TryParse(storedGuid, out Guid profilUserId))
             {
+
                 var projects = await profilDBContext.Project
                 .Where(p => p.ProfileId == profilUserId)
                 .ToListAsync();
+
+                var resources = profilDBContext.Profil
+                    .Where(p => p.Id == profilUserId)
+                    .SelectMany(p => p.projectList)
+                    .SelectMany(project => project.Sprints)
+                    .SelectMany(sprint => sprint.Ressources)
+                    .ToList();
+
+                ViewBag.Ressources = resources;
 
                 return View("Overview", projects);
             }

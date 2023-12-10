@@ -47,7 +47,15 @@ namespace ANA_ProjectDesigner.Controllers
                 ressourceDBContext.Ressource.Remove(ressource);
                 await ressourceDBContext.SaveChangesAsync();
 
-                return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
+                if (getRessourceRequest.sprintId != Guid.Empty)
+                {
+                        return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
+
+                } else
+                {
+                    return RedirectToAction("OverView", "Profil");
+                }
+
             }
             return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
         }

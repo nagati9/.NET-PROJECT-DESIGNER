@@ -38,6 +38,7 @@ namespace ANA_ProjectDesigner.Controllers
         public async Task<IActionResult> Add(AddSprintViewModel addSprintRequest)
         {
             var sprintExists = sprintDBContext.Sprint
+                .Where(s=> s.ProjectId == addSprintRequest.ProjectId)
                 .Any(s => s.DateStart >= addSprintRequest.DateStart && s.DateEnd <= addSprintRequest.DateEnd);
 
             if (sprintExists)

@@ -126,6 +126,33 @@ th {
     cursor: pointer; /* Curseur indiquant que le bouton est cliquable */
 }
 
+.bgtr {
+    background: #3D3939;
+}
+
+.bgred {
+    background: red;
+}
+
+.centerTable {
+    width: 70%;
+    align-self: center;
+}
+
+.button {
+    background-color: transparent;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+    .button:hover {
+        background-color: #3d393959;
+    }
+
 /* Style pour la pop-up */
 .popup {
     display: none;
