@@ -99,21 +99,45 @@ namespace ANA_ProjectDesigner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Remove(GetRessourceViewModel getRessourceRequest)
+        public async Task<IActionResult> Remove(AddWorkItemViewModel WorkItemModel)
         {
 
 
-            /*var ressource = await ressourceDBContext.Ressource.FindAsync(getRessourceRequest.Id);
+            var workItem = await workItemDBContext.WorkItem.FindAsync(WorkItemModel.Id);
 
-            if (ressource != null)
+            if (workItem != null)
             {
-                ressourceDBContext.Ressource.Remove(ressource);
-                await ressourceDBContext.SaveChangesAsync();
+                workItemDBContext.WorkItem.Remove(workItem);
+                await workItemDBContext.SaveChangesAsync();
 
-                return RedirectToAction("ProjcetDetail", "Project");
-            }*/
-            return RedirectToAction("ProjectDetail", "Project");
+                return RedirectToAction("ProjectDetail", "Project", new { WorkItemModel.projectId, selectedSprintId = WorkItemModel.SprintId });
+            }
+            return RedirectToAction("ProjectDetail", "Project", new { WorkItemModel.projectId, selectedSprintId = WorkItemModel.SprintId });
         }
+
+        [HttpPost]
+        public IActionResult Edit(AddWorkItemViewModel workItemUpdated)
+        {
+            var workItem = workItemDBContext.WorkItem.FirstOrDefault(s => s.Id == workItemUpdated.Id);
+
+            if (workItem != null)
+            {
+                // Mettre à jour les propriétés du sprint existant
+                workItem.TaskName = workItemUpdated.TaskName;
+                workItem.TaskType = workItemUpdated.TaskType;
+
+                workItemDBContext.SaveChanges();
+
+                // Redirection vers la vue "ProjectDetail" du contrôleur "Project"
+                return RedirectToAction("ProjectDetail", "Project", new { workItemUpdated.projectId, selectedSprintId = workItemUpdated.SprintId });
+            }
+
+
+            // En cas d'erreurs, retourner à la vue d'édition avec les données saisies
+            return RedirectToAction("ProjectDetail", "Project", new { workItemUpdated.projectId });
+        }
+
+
 
     }
 }
