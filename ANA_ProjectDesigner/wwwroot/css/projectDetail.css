@@ -300,3 +300,12 @@ th {
         .dropdown-content a:hover {
             background-color: #ddd;
         }
+
+#head {
+    background-color: #3D3939;
+    height:20%;
+}
+#cal{
+    height:90%;
+    width:90%;
+}

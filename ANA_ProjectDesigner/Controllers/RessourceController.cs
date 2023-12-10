@@ -52,5 +52,15 @@ namespace ANA_ProjectDesigner.Controllers
             return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
         }
 
+        [HttpGet]
+        public IActionResult ListResources(GetRessourceViewModel model)
+        {
+            var resources = ressourceDBContext.Ressource
+                .Where(r => r.SprintId == model.sprintId )
+                .ToList();
+
+            return View(resources);
+        }
+
     }
 }
