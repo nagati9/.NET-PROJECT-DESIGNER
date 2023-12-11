@@ -3,7 +3,6 @@ using ANA_ProjectDesigner.Models.Domain;
 using ANA_ProjectDesigner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ANA_ProjectDesigner.Services.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.Build.Evaluation;
 
@@ -12,14 +11,10 @@ namespace ANA_ProjectDesigner.Controllers
     public class ProjectController : Controller
     {
         private readonly MyDBContext projectDBContext;
-        private readonly IProjectsService _projectsService;
 
-
-        public ProjectController(MyDBContext projectDBContext, IProjectsService projectsService)
+        public ProjectController(MyDBContext projectDBContext)
         {
-
             this.projectDBContext = projectDBContext;
-            _projectsService = projectsService;
         }
 
         public class SprintWithWorkItems

@@ -1,6 +1,4 @@
 using ANA_ProjectDesigner.Data;
-using ANA_ProjectDesigner.Services.Implementations;
-using ANA_ProjectDesigner.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +13,6 @@ builder.Services.AddSession();
 builder.Services.AddDbContext<MyDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataConnectionString")));
 
-builder.Services.AddScoped<IProjectsService, ProjectsService>();
 
 var app = builder.Build();
 
