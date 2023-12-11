@@ -1,0 +1,79 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="popup" id="popupAddRessource">
+    <h2>Manage ressources</h2>
+
+    <!-- Div pour ajouter une ressource -->
+    <div class="add-resource-section">
+        <h3 style="text-align:left;color:white">Add a ressource</h3>
+        <form asp-action="Add" asp-controller="Ressource" method="post">
+            <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+            @if (@ViewBag.currentSprint != null)
+            {
+                <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" required>
+
+            }
+
+            <div style="display:flex; gap: 20px">
+                <!-- Champ de saisie pour le nom de la personne -->
+                <div class="form-group" style="width: 100%;">
+                    <label for="resourceName">Name</label>
+                    <input type="text" id="Name" name="Name" required>
+                </div>
+
+                <!-- Champ de saisie pour l'adresse e-mail -->
+                <div class="form-group" style="width: 100%;">
+                    <label for="resourceEmail">Email</label>
+                    <input type="email" id="resourceEmail" name="resourceEmail" required>
+                </div>
+            </div>
+            <!-- Champ de saisie pour l'adresse e-mail -->
+            <div class="form-group">
+                <label for="capacity">Ressource Capacity</label>
+                <input type="number" id="capacity" name="capacity" required>
+            </div>
+
+            <!-- Bouton pour ajouter la ressource -->
+            <button type="submit">Add Resource</button>
+            <button type="button" onclick="closePopup()">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Div pour la liste des ressources -->
+    <div class="resource-list-section">
+        <h3 style="color:white;text-align:left">Ressources in your sprint</h3>
+        <ul>
+            <li>
+                @if (@ViewBag.currentSprint != null)
+                {
+                    <div style="color: white; display: flex;flex-direction: column;gap: 2vh;">
+                        @foreach (var ressource in @ViewBag.currentSprint.Ressources)
+                        {
+                            <div style="width: 100%;text-align: left;margin-right: 5vh;">
+                                <form asp-controller="Ressource" asp-action="Remove" method="post" onsubmit="return confirm('Are you sure you want to remove this resource?');">
+                                    <input type="hidden" id="Id" name="Id" value="@ressource.Id">
+                                    <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                                    <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                                    <span>@ressource.Name</span>
+                                    <button style="background-color:red" onclick="deleteResource('@ressource.Id')">
+                                        Remove ressource
+                                    </button>
+
+                                </form>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No existing sprint</p>
+                }
+            </li>
+        </ul>
+    </div>
+
+</div>

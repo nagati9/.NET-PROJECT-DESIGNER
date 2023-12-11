@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="popup" id="popupEditTask">
+    <h2>Edit task</h2>
+    <form asp-action="Edit" asp-controller="WorkItem" method="post" onsubmit="return confirm('Are you sure you want to update this workitem?');">
+        <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+        <table class="sprint-table">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Task Type</th>
+                    <th>Task Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@ViewBag.workItem != null)
+                {
+                    var rowIndex = 1;
+                    @foreach (var workItem in @ViewBag.workItem)
+                    {
+                        <input type="hidden" id="Id" name="Id" value="@workItem.Id">
+                        <input type="hidden" id="sprintId" name="sprintId" value="@ViewBag.currentSprint.SprintId" />
+                        <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+                        <tr>
+                            <th>@rowIndex</th>
+                            <th><input id="TaskType" name="TaskType" value="@workItem.TaskType"></th>
+                            <th><input id="TaskName" name="TaskName" value="@workItem.TaskName"></th>
+                            <th>
+                                <button style="background-color:green" onclick="deleteResource('@workItem.Id')">
+                                    Update
+                                </button>
+                            </th>
+                        </tr>
+                        rowIndex++;
+                    }
+                }
+            </tbody>
+        </table>
+        <button type="button" style="margin-top:2%" onclick="closePopup()">Cancel</button>
+    </form>
+</div>

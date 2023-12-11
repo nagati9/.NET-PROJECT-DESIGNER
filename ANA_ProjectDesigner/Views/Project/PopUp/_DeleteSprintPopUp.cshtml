@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="popup" id="popupDelete">
+    <h2>Delete a sprint</h2>
+    <form asp-action="DeleteSprint" asp-controller="Sprint" method="post" onsubmit="return prepareDeleteForm()">
+        <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+        <div class="table-container">
+            <table class="sprint-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Sprint Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (@ViewBag.listSprints != null)
+                    {
+                        @foreach (var sprint in @ViewBag.listSprints)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="select-checkbox" data-sprint-number="@sprint.SprintId" onchange="updateDeleteButtonState()" />
+                                </td>
+                                <td>@sprint.SprintName</td>
+                                <td>@sprint.DateStart.ToString("yyyy-MM-dd")</td>
+                                <td>@sprint.DateEnd.ToString("yyyy-MM-dd")</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="SprintIdToDelete" name="SprintId" value="">
+        <button type="submit" id="deleteButton" onclick="saveSprint()" disabled>Delete</button>
+        <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+</div>

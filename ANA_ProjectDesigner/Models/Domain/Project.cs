@@ -17,7 +17,5 @@ namespace ANA_ProjectDesigner.Models.Domain
 
         public virtual List<Sprint> Sprints { get; set; }
 
-        //linking to sprints 1..*
-        //public virtual List<Sprints> Sprints { get; set; }
     }
 }

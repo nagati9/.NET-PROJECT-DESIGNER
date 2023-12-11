@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="popup" id="popupWorkItem">
+    <h2>Add Item Type</h2>
+    <form asp-action="Add" asp-controller="WorkItem" method="post">
+        <input type="hidden" id="projectId" name="projectId" value="@ViewBag.projectID" />
+        @if (@ViewBag.currentSprint != null)
+        {
+            <input type="hidden" id="SprintId" name="SprintId" value="@ViewBag.currentSprint.SprintId">
+        }
+        <div class="form-group">
+            <label for="TaskName">Task Name</label>
+            <input type="text" id="TaskName" name="TaskName" required>
+        </div>
+
+        <div class="form-groupbis">
+            <div>
+                <label for="TaskType" style="margin-left: 15px;">New Task Type</label>
+                <input type="text" id="TaskType" name="TaskType" required>
+            </div>
+        </div>
+
+        <button type="submit" onclick="closePopup()">Enregistrer</button>
+    </form>
+</div>

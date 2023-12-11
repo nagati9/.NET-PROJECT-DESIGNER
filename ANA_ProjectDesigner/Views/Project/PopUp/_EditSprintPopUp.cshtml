@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="popup" id="popupEdit">
+    <h2>Edit Sprint</h2>
+    <form asp-action="EditSprint" asp-controller="Sprint" method="post">
+        <input type="hidden" name="sprintId" value="@ViewBag?.currentSprint?.SprintId" />
+        <div class="form-group">
+            <label>Sprint Name</label>
+            <input type="text" name="SprintName" class="form-control" value="@ViewBag?.currentSprint?.SprintName" />
+        </div>
+        <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" name="DateStart" class="form-control" value="@(ViewBag?.currentSprint?.DateStart).ToString(" yyyy-MM-dd")" />
+        </div>
+        <div class="form-group">
+            <label>End Date</label>
+            <input type="date" name="DateEnd" class="form-control" value="@(ViewBag?.currentSprint?.DateEnd).ToString(" yyyy-MM-dd")" />
+        </div>
+        <div class="form-group">
+            <label>Comments</label>
+            <textarea name="Comments" class="form-control">@ViewBag?.currentSprint?.Comments</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+</div>

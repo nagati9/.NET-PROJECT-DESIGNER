@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="popup" id="popup">
+    <h2>Ajouter un sprint</h2>
+    <form asp-action="Add" asp-controller="Sprint" method="post">
+
+        <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.projectId">
+
+        <div class="form-group">
+            <label for="sprintName">Sprint Name</label>
+            <input type="text" id="sprintName" name="sprintName">
+        </div>
+
+        <div class="form-groupbis">
+            <div>
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" name="DateStart" asp-format="{0:yyyy-MM-dd}">
+            </div>
+            <div>
+                <label for="endDate" style="margin-left: 15px;">End Date</label>
+                <input type="date" id="endDate" name="DateEnd" asp-format="{0:yyyy-MM-dd}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea id="comments" name="comments"></textarea>
+        </div>
+
+        <button type="submit" onclick="saveSprint()">Add</button>
+        <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+</div>

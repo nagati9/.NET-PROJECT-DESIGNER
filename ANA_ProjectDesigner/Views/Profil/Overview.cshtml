@@ -14,14 +14,14 @@
     <title>Votre Page</title>
     <link rel="stylesheet" type="text/css" href="~/css/projectDetail.css">
     <style>
-        body{
+        body {
             display: flex;
             flex-direction: column;
         }
-        #head {
-            display:flex;
-            flex-direction:row;
 
+        #head {
+            display: flex;
+            flex-direction: row;
             background-color: #3D3939;
             height: 1%;
         }
@@ -31,22 +31,23 @@
             height: 10%;
             width: 10%;
         }
-        #cal{
+
+        #cal {
             display: flex;
-            align-self:center;
-            justify-content:center;
+            align-self: center;
+            justify-content: center;
         }
 
-        #prj{
+        #prj {
             display: flex;
-            align-content:center;
-            align-self:center;
-            justify-self:center;
-            justify-content:center;
-            background-color:white;
-            width:20%;
-            height:20%;
-            position:center;
+            align-content: center;
+            align-self: center;
+            justify-self: center;
+            justify-content: center;
+            background-color: white;
+            width: 20%;
+            height: 20%;
+            position: center;
         }
     </style>
 </head>
@@ -55,16 +56,16 @@
 
         <img id="cal" src="/images/Logo_Calendar.svg" alt="Illustration" />
         <div id="dropdown">
-        <select onchange="redirectToProject(this)">
-            <option value="overview" selected>Overview</option>
-            @foreach (var project in Model)
-            {
-                <option value="@project.Id">@project.Name</option>
-            }
-        </select>
-        <form id="projectForm" asp-controller="Project" asp-action="ProjectDetail" method="post">
-            <input type="hidden" id="selectedProjectId" name="projectId" />
-        </form>
+            <select onchange="redirectToProject(this)">
+                <option value="overview" selected>Overview</option>
+                @foreach (var project in Model)
+                {
+                    <option value="@project.Id">@project.Name</option>
+                }
+            </select>
+            <form id="projectForm" asp-controller="Project" asp-action="ProjectDetail" method="post">
+                <input type="hidden" id="selectedProjectId" name="projectId" />
+            </form>
         </div>
         <script>
             function redirectToProject(selectElement) {
@@ -78,9 +79,9 @@
                 }
             }
         </script>
-        </div>
+    </div>
     <p id="prj">
-       Projects
+        Projects
     </p>
     <table class="centerTable">
         <thead>
@@ -112,11 +113,7 @@
 
     </table>
 
-    <button style="margin-top:20px;
-    width: 50%;
-color:white;
-    background: black;
-    align-self: center;" onclick="openPopup('Add')">
+    <button style="margin-top:20px;width: 50%;color:white;background: black; align-self: center;" onclick="openPopup('Add')">
         Create New Project
     </button>
 
@@ -124,12 +121,12 @@ color:white;
 
 
     <p id="prj">
-       Ressources
+        Ressources
     </p>
 
     @if (ViewBag.Ressources != null && ViewBag.Ressources.Count > 0)
     {
-            <table class="centerTable">
+        <table class="centerTable">
             <thead>
                 <tr>
                     <th>Nom</th>
@@ -143,12 +140,12 @@ color:white;
                     <tr class="bgtr">
                         <td>@ressource.Name</td>
                         <td>@ressource.Capacity</td>
-                            <td>
+                        <td>
                             <form action="@Url.Action("Remove", "Ressource")" method="post">
                                 <input type="hidden" name="id" value="@ressource.Id" />
                                 <button class="button" type="submit">Delete</button>
                             </form>
-                            </td>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -160,9 +157,6 @@ color:white;
     }
 
     <!-- Rest of your HTML and scripts for popups and functionality -->
-
-
-    
     <!-- Div pour la pop-up -->
     <div class="popup" id="popup">
         <h2>New Project</h2>
@@ -199,7 +193,7 @@ color:white;
         </form>
     </div>
 
-   
+
 
     <!-- Div pour l'arrière-plan obscurci de la pop-up -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
@@ -238,14 +232,14 @@ color:white;
         // Rest of your script remains unchanged
 
 
-        
+
 
         // Fonction pour ouvrir la pop-up
         function openPopup(content) {
             document.getElementById('overlay').style.display = 'block';
             switch (content) {
                 case 'Add':
-          
+
                     document.getElementById('popup').style.display = 'block';
                     break;
                 case 'Delete':
@@ -295,7 +289,7 @@ color:white;
 
 
 
-      
+
     </script>
 
 

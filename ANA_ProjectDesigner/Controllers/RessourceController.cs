@@ -38,25 +38,32 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpPost]
         public async Task<IActionResult> Remove(GetRessourceViewModel getRessourceRequest)
         {
-           
-
             var ressource = await ressourceDBContext.Ressource.FindAsync(getRessourceRequest.Id);
 
             if (ressource != null)
             {
+                // Supprimer les lignes de WorkItemRessource correspondantes
+                var workItemRessourcesToRemove = ressourceDBContext.WorkItemRessource
+                    .Where(wir => wir.RessourceId == ressource.Id)
+                    .ToList();
+
+                ressourceDBContext.WorkItemRessource.RemoveRange(workItemRessourcesToRemove);
+                await ressourceDBContext.SaveChangesAsync();
+
+                // Supprimer la ressource
                 ressourceDBContext.Ressource.Remove(ressource);
                 await ressourceDBContext.SaveChangesAsync();
 
                 if (getRessourceRequest.sprintId != Guid.Empty)
                 {
-                        return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
-
-                } else
+                    return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
+                }
+                else
                 {
                     return RedirectToAction("OverView", "Profil");
                 }
-
             }
+
             return RedirectToAction("ProjectDetail", "Project", new { getRessourceRequest.projectId, selectedSprintId = getRessourceRequest.sprintId });
         }
 
