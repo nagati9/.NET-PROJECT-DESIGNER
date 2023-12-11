@@ -1,0 +1,21 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="popup" id="popupEdit">
+    <h2>Edit Project</h2>
+    <form id="editProjectForm" method="post">
+        <div class="button">
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="editName" placeholder="Enter project name">
+        </div>
+
+        <div class="button">
+            <label for="editDescription">Description:</label>
+            <input type="text" class="inputSize" id="editDescription" name="editDescription" placeholder="Enter project description">
+        </div>
+
+        <button type="submit" name="Submit">Save</button>
+    </form>
+</div>

@@ -174,7 +174,7 @@ namespace ANA_ProjectDesigner.Controllers
         [HttpGet]
         public IActionResult CreateProject()
         {
-            return View(); // This view should contain the form for creating a new project in a popup
+            return View(); 
         }
 
         [HttpGet]
@@ -186,7 +186,7 @@ namespace ANA_ProjectDesigner.Controllers
                 return NotFound();
             }
 
-            return View(project); // This view should contain the form for editing a project in a popup
+            return View(project);
         }
 
 

@@ -1,12 +1,6 @@
 ﻿@using ANA_ProjectDesigner.Models.Domain;
 @model List<ANA_ProjectDesigner.Models.Domain.Project>
 
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,41 +151,8 @@
     }
 
     <!-- Div pour la pop-up -->
-    <div class="popup" id="popup">
-        <h2>New Project</h2>
-        <form action="CreateProject" method="post">
-            <div class="button">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter project name">
-            </div>
-
-            <div class="button">
-                <label for="description">Description:</label>
-                <input type="text" class="inputSize" id="description" name="description" placeholder="Enter project description">
-            </div>
-
-            <button type="submit" name="Submit">Save</button>
-        </form>
-    </div>
-
-
-    <div class="popup" id="popupEdit">
-        <h2>Edit Project</h2>
-        <form id="editProjectForm" method="post">
-            <div class="button">
-                <label for="editName">Name:</label>
-                <input type="text" id="editName" name="editName" placeholder="Enter project name">
-            </div>
-
-            <div class="button">
-                <label for="editDescription">Description:</label>
-                <input type="text" class="inputSize" id="editDescription" name="editDescription" placeholder="Enter project description">
-            </div>
-
-            <button type="submit" name="Submit">Save</button>
-        </form>
-    </div>
-
+    @Html.Partial("PopUp/_CreateProjectPopUp")
+    @Html.Partial("PopUp/_EditProjectPopUp")
 
 
     <!-- Div pour l'arrière-plan obscurci de la pop-up -->
